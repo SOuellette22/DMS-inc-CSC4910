@@ -5,5 +5,6 @@ This project builds a public, easy-to-use website that predicts culvert conditio
 
 ---
 
-## Team Charter
- - [Link to Google Doc](https://docs.google.com/document/d/149NgPigSCGIX7yueF8f0Pnu0fES1BcW7ZFphQcvbJkk/edit?usp=sharing)
+## Documents
+ - [Team Charter](https://docs.google.com/document/d/149NgPigSCGIX7yueF8f0Pnu0fES1BcW7ZFphQcvbJkk/edit?usp=sharing)
+ - [Requirements Document](https://docs.google.com/document/d/1EEfwas8moUHnBnlsdQN27V9cU-uG57uX3xUNHZQ0Z0c/edit?usp=sharing)
