@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rate a Culvert — DMS Inc.</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img src="DMSLOGO.PNG" alt="DMS Inc. Logo" class="brand-logo" />
+      </div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="info.html">Info</a>
+        <a href="rate.html" class="active">Rate a Culvert</a>
+      </nav>
+    </header>
+
+    <main class="content-narrow">
+      <!-- Photo on top -->
+      <section class="hero">
+        <img
+          src="./3d_sewer_storm_water_outlet_47_00001.jpg"
+          alt="3D storm water outlet rendering"
+          class="hero-img"
+          width="1920"
+          height="1080"
+        />
+        <div class="hero-overlay">
+          <h1>Enter Culvert Details</h1>
+          <p class="lead">
+            Provide the required site and design attributes to generate a
+            condition rating. (Backend processing coming soon.)
+          </p>
+        </div>
+      </section>
+
+      <!-- Form underneath -->
+      <form
+        class="card form-card"
+        action="#"
+        method="post"
+        onsubmit="return false;"
+      >
+        <fieldset class="field-grid">
+          <!-- Soil / Environment -->
+          <legend>Soil &amp; Environment</legend>
+
+          <label>
+            <span>Soil pH (0–14)</span>
+            <input
+              type="number"
+              name="soil_ph"
+              step="0.1"
+              min="0"
+              max="14"
+              placeholder="e.g., 6.8"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Soil Drainage Class</span>
+            <select name="soil_drainage" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Very Poorly Drained</option>
+              <option>Poorly Drained</option>
+              <option>Somewhat Poorly Drained</option>
+              <option>Moderately Poorly Drained</option>
+              <option>Well Drained</option>
+              <option>High</option>
+              <option>Somewhat Excessively Drained</option>
+              <option>Excessively Drained</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Soil Moisture (%)</span>
+            <input
+              type="number"
+              name="soil_moisture"
+              step="0.1"
+              min="0"
+              max="100"
+              placeholder="0–100"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Soil Electrical Conductivity (&gt; 0)</span>
+            <input
+              type="number"
+              name="soil_ec"
+              step="0.01"
+              min="0.000001"
+              placeholder="e.g., 1.25"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Flood Frequency</span>
+            <select name="flood_frequency" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>None</option>
+              <option>Very Rare</option>
+              <option>Rare</option>
+              <option>Occasional</option>
+              <option>Frequent</option>
+            </select>
+          </label>
+
+          <!-- Culvert Attributes -->
+          <legend>Culvert Attributes</legend>
+
+          <label>
+            <span>Culvert Material</span>
+            <select name="culvert_material" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Aluminum</option>
+              <option>Corrugated Steel</option>
+              <option>HDPE</option>
+              <option>PVC</option>
+              <option>Steel Plate</option>
+              <option>Reinforced Concrete</option>
+              <option>Unreinforced Concrete</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Culvert Shape</span>
+            <select name="culvert_shape" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Box</option>
+              <option>Round</option>
+              <option>Arch</option>
+              <option>Drop Inlet</option>
+              <option>Ellipse</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Culvert Length (ft)</span>
+            <input
+              type="number"
+              name="culvert_length"
+              step="0.1"
+              min="0.000001"
+              placeholder="&gt; 0"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Culvert Age (years)</span>
+            <input
+              type="number"
+              name="culvert_age"
+              step="1"
+              min="0"
+              placeholder="≥ 0"
+              required
+            />
+          </label>
+
+          <p class="helper">
+            Inputs and allowable ranges per project requirements. Rating scale:
+            1 (poor) to 5 (excellent).
+          </p>
+
+          <div class="actions">
+            <button class="btn" type="submit" title="Placeholder only">
+              Get Rating (Coming Soon)
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </main>
+
+    <footer class="site-footer">
+      <small>© 2025 DMS Inc.</small>
+    </footer>
+  </body>
+</html>
