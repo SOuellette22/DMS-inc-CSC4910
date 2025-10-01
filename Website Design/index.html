@@ -27,7 +27,7 @@
         aria-pressed="false"
         title="Toggle theme"
       >
-        <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
         <span class="theme-toggle__label">Theme</span>
       </button>
     </header>
@@ -83,7 +83,54 @@
       </small>
     </footer>
 
-    <!-- this is the theme behavior script; make sure theme.js sits next to this file -->
-    <script src="theme.js"></script>
+    <!-- this is the inline theme controller (works without theme.js) -->
+    <script>
+      // this is the theme controller: reads system/user preference, toggles data-theme, and updates the button
+      (function () {
+        // this is the localStorage key we use to remember the user's choice
+        const STORAGE_KEY = "theme-preference";
+
+        // this is the root element and the toggle button
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+
+        // this is a guard: if there is no toggle on this page, do nothing
+        if (!toggle) return;
+
+        // this is the starting theme: prefer stored value; otherwise follow system
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const initial = stored ?? (prefersDark ? "dark" : "light");
+        setTheme(initial);
+
+        // this is the click handler that flips between light/dark
+        toggle.addEventListener("click", () => {
+          const next =
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next, true);
+        });
+
+        // this is a listener to follow system changes if user hasn't explicitly chosen
+        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        mq.addEventListener?.("change", (e) => {
+          if (!localStorage.getItem(STORAGE_KEY)) {
+            setTheme(e.matches ? "dark" : "light");
+          }
+        });
+
+        // this is the function that applies theme and updates UI + persistence
+        function setTheme(mode, persist = false) {
+          root.setAttribute("data-theme", mode);
+          if (persist) localStorage.setItem(STORAGE_KEY, mode);
+
+          const isDark = mode === "dark";
+          toggle.setAttribute("aria-pressed", String(isDark));
+          const icon = toggle.querySelector(".theme-toggle__icon");
+          if (icon) icon.textContent = isDark ? "" : "";
+        }
+      })();
+    </script>
   </body>
 </html>
