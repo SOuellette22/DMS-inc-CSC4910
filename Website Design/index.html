@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DMS Inc. – Culvert Rating</title>
+    <!-- this is linking the shared stylesheet that contains light/dark tokens -->
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- this is the site header with brand, nav, and the theme toggle button -->
     <header class="site-header">
       <div class="brand">
         <img src="DMSLOGO.PNG" alt="DMS Inc. Logo" class="brand-logo" />
@@ -18,7 +20,7 @@
         <a href="rate.html">Rate a Culvert</a>
       </nav>
 
-      <!-- Theme toggle -->
+      <!-- this is the theme toggle control; JS looks for id="theme-toggle" -->
       <button
         id="theme-toggle"
         class="theme-toggle"
@@ -31,6 +33,7 @@
     </header>
 
     <main>
+      <!-- this is the hero section with image + gradient overlay text -->
       <section class="hero">
         <img
           src="./Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
@@ -45,6 +48,7 @@
         </div>
       </section>
 
+      <!-- this is the card grid that links to pages -->
       <section class="cards">
         <a class="card card-link" href="info.html" aria-label="Project Info">
           <h2>Project Info</h2>
@@ -59,6 +63,7 @@
         </a>
       </section>
 
+      <!-- this is a short explanatory blurb -->
       <section class="blurb">
         <h3>What this site does</h3>
         <p>
@@ -70,6 +75,7 @@
       </section>
     </main>
 
+    <!-- this is the footer -->
     <footer class="site-footer">
       <small>
         © 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari · Team
@@ -77,6 +83,7 @@
       </small>
     </footer>
 
+    <!-- this is the theme behavior script; make sure theme.js sits next to this file -->
     <script src="theme.js"></script>
   </body>
 </html>
