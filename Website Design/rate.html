@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Rate a Culvert — DMS Inc.</title>
+    <!-- this is shared styles with theme tokens -->
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- this is header with toggle -->
     <header class="site-header">
       <div class="brand">
         <img src="DMSLOGO.PNG" alt="DMS Inc. Logo" class="brand-logo" />
@@ -18,7 +20,7 @@
         <a href="rate.html" class="active">Rate a Culvert</a>
       </nav>
 
-      <!-- Theme toggle -->
+      <!-- this is the theme toggle button -->
       <button
         id="theme-toggle"
         class="theme-toggle"
@@ -30,8 +32,8 @@
       </button>
     </header>
 
+    <!-- this is main content with hero photo and form -->
     <main class="content-narrow">
-      <!-- Photo on top -->
       <section class="hero">
         <img
           src="./3d_sewer_storm_water_outlet_47_00001.jpg"
@@ -49,7 +51,6 @@
         </div>
       </section>
 
-      <!-- Form underneath -->
       <form
         class="card form-card"
         action="#"
@@ -57,7 +58,6 @@
         onsubmit="return false;"
       >
         <fieldset class="field-grid">
-          <!-- Soil / Environment -->
           <legend>Soil &amp; Environment</legend>
 
           <label>
@@ -125,7 +125,6 @@
             </select>
           </label>
 
-          <!-- Culvert Attributes -->
           <legend>Culvert Attributes</legend>
 
           <label>
@@ -192,10 +191,12 @@
       </form>
     </main>
 
+    <!-- this is footer -->
     <footer class="site-footer">
       <small>© 2025 DMS Inc.</small>
     </footer>
 
+    <!-- this is the theme script -->
     <script src="theme.js"></script>
   </body>
 </html>
