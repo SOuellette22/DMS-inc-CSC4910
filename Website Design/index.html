@@ -4,39 +4,440 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DMS Inc. – Culvert Rating</title>
-    <!-- this is linking the shared stylesheet that contains light/dark tokens -->
-    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      /* --------------- THEME TOKENS --------------- */
+      /* this is light + dark variables used across the site */
+      :root {
+        /* this is default to light; script may overwrite data-theme */
+        color-scheme: light;
+
+        /* this is light theme tokens */
+        --bg: #ffffff;
+        --text: #111827; /* this is near-black for readability */
+        --muted: #6b7280; /* this is gray-500 */
+        --card: #f9fafb; /* this is gray-50 */
+        --card-elev: #ffffff;
+        --border: #e5e7eb; /* this is gray-200 */
+        --link: #2563eb; /* this is blue-600 */
+        --accent: #2563eb;
+        --overlay: rgba(0, 0, 0, 0.45);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      }
+
+      :root[data-theme="dark"] {
+        /* this is dark theme */
+        color-scheme: dark;
+        --bg: #0b0f19; /* this is deep navy */
+        --text: #e5e7eb; /* this is gray-200 */
+        --muted: #9ca3af; /* this is gray-400 */
+        --card: #101626; /* this is slightly lighter than bg */
+        --card-elev: #0f1423;
+        --border: #1f2937; /* this is gray-800 */
+        --link: #60a5fa; /* this is blue-300 */
+        --accent: #60a5fa;
+        --overlay: rgba(0, 0, 0, 0.5);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      }
+
+      /* --------------- BASE --------------- */
+      /* this is global resets and base typography */
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter,
+          Arial, sans-serif;
+      }
+
+      /* this is links */
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* --------------- LAYOUT HELPERS --------------- */
+      .content-narrow {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .cards {
+        max-width: 1100px;
+        margin: 2rem auto 3rem;
+        padding: 0 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+      }
+
+      /* --------------- HEADER & NAV --------------- */
+      /* this is sticky site header and nav links */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .brand-logo {
+        height: 44px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
+
+      .nav {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .nav a {
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        color: var(--text);
+        border: 1px solid transparent;
+      }
+      .nav a.active {
+        background: var(--card-elev);
+        border-color: var(--border);
+        text-decoration: none;
+      }
+
+      /* --------------- THEME SWITCH (NEW BUTTON) --------------- */
+      /* this is a visually-hidden utility (for accessible labels) */
+      .vh {
+        /* this is visually hide while remaining accessible to screen readers */
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* this is the brand-new theme switch (pill + sliding knob) */
+      .theme-switch {
+        /* this is reset */
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+
+        /* this is layout */
+        position: relative;
+        display: inline-grid;
+        grid-auto-flow: column;
+        align-items: center;
+        justify-items: center;
+
+        /* this is size (tweak to taste) */
+        width: 100px; /* this is pill width */
+        height: 44px; /* this is pill height */
+        border-radius: 9999px;
+        padding: 0; /* this is no padding; knob handles vertical spacing */
+
+        /* this is visuals (theme-aware) */
+        background: var(--card-elev);
+        border: 1px solid var(--border);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+
+        /* this is motion polish */
+        transition: background 160ms ease, border-color 160ms ease,
+          box-shadow 160ms ease, color 160ms ease;
+      }
+
+      /* this is icons on the track (left sun / right moon) */
+      .theme-switch__sun,
+      .theme-switch__moon {
+        font-size: 18px;
+        line-height: 1;
+        opacity: 0.9;
+        pointer-events: none;
+        z-index: 1; /* this is keep above the knob */
+        user-select: none;
+      }
+
+      /* this is layout the icons into two equal halves */
+      .theme-switch__sun {
+        justify-self: start;
+        margin-left: 14px;
+      }
+      .theme-switch__moon {
+        justify-self: end;
+        margin-right: 14px;
+      }
+
+      /* this is the sliding knob */
+      .theme-switch__knob {
+        position: absolute;
+        top: 4px;
+        left: 4px; /* this is start on the left (light) */
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+        transition: left 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
+          background 160ms ease, border-color 160ms ease;
+        pointer-events: none;
+      }
+
+      /* this is move the knob right when dark is active */
+      :root[data-theme="dark"] .theme-switch__knob {
+        left: calc(100% - 4px - 36px);
+      }
+
+      /* this is hover/focus polish */
+      .theme-switch:hover {
+        filter: brightness(1.02);
+      }
+      .theme-switch:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* this is respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .theme-switch__knob {
+          transition: none;
+        }
+        .theme-switch {
+          transition: none;
+        }
+      }
+
+      /* --------------- HERO --------------- */
+      /* this is the big image header and overlay text */
+      .hero {
+        position: relative;
+        display: grid;
+        place-items: center;
+        margin: 0 auto;
+        max-width: 1200px;
+        overflow: clip;
+        border-radius: 16px;
+      }
+      .hero-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 1.25rem 1rem 1.5rem;
+        color: #fff;
+        background: linear-gradient(to top, var(--overlay), transparent 65%);
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+      }
+      .hero-overlay h1 {
+        margin: 0 0 0.25rem;
+        font-size: clamp(20px, 3vw, 32px);
+      }
+      .hero-overlay p {
+        margin: 0;
+        opacity: 0.95;
+      }
+
+      /* --------------- CARDS --------------- */
+      /* this is generic card styles used in grids and content */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+      }
+      .card-link {
+        display: block;
+        transition: transform 0.08s ease, background-color 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .card-link:hover {
+        transform: translateY(-2px);
+        text-decoration: none;
+        border-color: var(--accent);
+      }
+
+      /* --------------- TYPOGRAPHY --------------- */
+      /* this is headline + helper text */
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+        margin: 1rem 0 0.5rem;
+      }
+      .lead {
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .simple-list {
+        padding-left: 1.1rem;
+      }
+      .simple-list li {
+        margin: 0.4rem 0;
+      }
+
+      /* --------------- FORM --------------- */
+      /* this is form grid and inputs styled with theme vars */
+      .form-card {
+        margin-top: 1rem;
+      }
+      .field-grid {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      legend {
+        grid-column: 1 / -1;
+        font-weight: 700;
+        margin-top: 0.25rem;
+      }
+      label {
+        display: grid;
+        gap: 0.35rem;
+      }
+      label span {
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      input[type="number"],
+      select {
+        padding: 0.6rem 0.7rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card-elev);
+        color: var(--text);
+        outline: none;
+      }
+      input[type="number"]::placeholder {
+        color: color-mix(in oklab, var(--muted), transparent 35%);
+      }
+
+      input[type="number"]:focus,
+      select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px
+          color-mix(in oklab, var(--accent), transparent 75%);
+      }
+
+      .helper {
+        grid-column: 1 / -1;
+        color: var(--muted);
+        margin-top: 0.25rem;
+      }
+
+      .actions {
+        grid-column: 1 / -1;
+        margin-top: 0.3rem;
+      }
+      .btn {
+        padding: 0.7rem 1rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn:hover {
+        filter: brightness(1.05);
+      }
+
+      /* --------------- FOOTER --------------- */
+      /* this is footer styles */
+      .site-footer {
+        margin-top: 2.5rem;
+        padding: 1rem;
+        border-top: 1px solid var(--border);
+        background: var(--card);
+        text-align: center;
+        color: var(--muted);
+      }
+
+      /* --------------- RESPONSIVE TWEAKS --------------- */
+      /* this is small-screen header tweak */
+      @media (max-width: 740px) {
+        .site-header {
+          grid-template-columns: 1fr auto auto;
+        }
+        .brand-logo {
+          height: 38px;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <!-- this is the site header with brand, nav, and the theme toggle button -->
+    <!-- this is the site header with brand, nav, and the theme switch -->
     <header class="site-header">
       <div class="brand">
+        <!-- this is your logo (you can swap the src to your actual file or a placeholder) -->
         <img src="DMSLOGO.PNG" alt="DMS Inc. Logo" class="brand-logo" />
       </div>
 
       <nav class="nav">
-        <a href="index.html" class="active">Home</a>
-        <a href="info.html">Info</a>
-        <a href="rate.html">Rate a Culvert</a>
+        <a href="#" class="active">Home</a>
+        <a href="#">Info</a>
+        <a href="#">Rate a Culvert</a>
       </nav>
 
-      <!-- this is the theme toggle control; JS looks for id="theme-toggle" -->
+      <!-- this is the brand-new theme switch; it keeps id="theme-toggle" so the JS can find it -->
       <button
         id="theme-toggle"
-        class="theme-toggle"
+        class="theme-switch"
         aria-pressed="false"
         title="Toggle theme"
       >
-        <span class="theme-toggle__icon" aria-hidden="true"></span>
-        <span class="theme-toggle__label">Theme</span>
+        <span class="vh">Toggle theme</span>
+        <span class="theme-switch__sun" aria-hidden="true">☀️</span>
+        <span class="theme-switch__moon" aria-hidden="true">🌙</span>
+        <span class="theme-switch__knob" aria-hidden="true"></span>
       </button>
     </header>
 
     <main>
-      <!-- this is the hero section with image + gradient overlay text -->
+      <!-- this is the hero section -->
       <section class="hero">
+        <!-- this is a placeholder image; swap to your actual path -->
         <img
-          src="./Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
+          src="Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
           alt="Culvert at Tower Drive, Town of Seymour"
           class="hero-img"
           width="800"
@@ -48,14 +449,14 @@
         </div>
       </section>
 
-      <!-- this is the card grid that links to pages -->
+      <!-- this is the card grid -->
       <section class="cards">
-        <a class="card card-link" href="info.html" aria-label="Project Info">
+        <a class="card card-link" href="#" aria-label="Project Info">
           <h2>Project Info</h2>
           <p>Overview, team, and documentation.</p>
         </a>
 
-        <a class="card card-link" href="rate.html" aria-label="Rate a Culvert">
+        <a class="card card-link" href="#" aria-label="Rate a Culvert">
           <h2>Rate a Culvert</h2>
           <p>
             Enter culvert details to get a 1–5 rating (backend coming soon).
@@ -64,7 +465,7 @@
       </section>
 
       <!-- this is a short explanatory blurb -->
-      <section class="blurb">
+      <section class="content-narrow">
         <h3>What this site does</h3>
         <p>
           Enter nine parameters—soil, environment, and culvert attributes—and
@@ -83,52 +484,45 @@
       </small>
     </footer>
 
-    <!-- this is the inline theme controller (works without theme.js) -->
+    <!-- --------------- THEME SCRIPT --------------- -->
+    <!-- this is inline theme controller: persists choice, follows system if no choice -->
     <script>
-      // this is the theme controller: reads system/user preference, toggles data-theme, and updates the button
       (function () {
-        // this is the localStorage key we use to remember the user's choice
+        // this is the localStorage key used to remember the user's choice
         const STORAGE_KEY = "theme-preference";
 
         // this is the root element and the toggle button
         const root = document.documentElement;
         const toggle = document.getElementById("theme-toggle");
 
-        // this is a guard: if there is no toggle on this page, do nothing
+        // this is a guard: if no button, bail
         if (!toggle) return;
 
-        // this is the starting theme: prefer stored value; otherwise follow system
+        // this is compute initial theme: stored > system > light
         const stored = localStorage.getItem(STORAGE_KEY);
-        const prefersDark =
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
         const initial = stored ?? (prefersDark ? "dark" : "light");
         setTheme(initial);
 
-        // this is the click handler that flips between light/dark
+        // this is toggle on click
         toggle.addEventListener("click", () => {
           const next =
             root.getAttribute("data-theme") === "dark" ? "light" : "dark";
           setTheme(next, true);
         });
 
-        // this is a listener to follow system changes if user hasn't explicitly chosen
-        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        // this is watch system theme changes if the user hasn't chosen
+        const mq = matchMedia("(prefers-color-scheme: dark)");
         mq.addEventListener?.("change", (e) => {
-          if (!localStorage.getItem(STORAGE_KEY)) {
+          if (!localStorage.getItem(STORAGE_KEY))
             setTheme(e.matches ? "dark" : "light");
-          }
         });
 
-        // this is the function that applies theme and updates UI + persistence
+        // this is apply theme + aria state
         function setTheme(mode, persist = false) {
           root.setAttribute("data-theme", mode);
           if (persist) localStorage.setItem(STORAGE_KEY, mode);
-
-          const isDark = mode === "dark";
-          toggle.setAttribute("aria-pressed", String(isDark));
-          const icon = toggle.querySelector(".theme-toggle__icon");
-          if (icon) icon.textContent = isDark ? "" : "";
+          toggle.setAttribute("aria-pressed", String(mode === "dark"));
         }
       })();
     </script>
