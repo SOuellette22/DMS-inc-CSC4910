@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DMS Inc. – Culvert Rating</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Page-local only: positions the rating box without changing global style */
+      .hero.layered {
+        position: relative;
+      }
+      .rating-box {
+        position: absolute;
+        left: 0;
+        top: 0;
+        max-width: 320px;
+        z-index: 5;
+      }
+      .rating-box .btn-link {
+        display: inline-block;
+        margin-top: 8px;
+        border: 1px solid var(--outline);
+        border-radius: 12px;
+        padding: 10px 14px;
+        background: #0b0d14;
+        color: var(--text);
+      }
+      /* On smaller screens, stack the box beneath the image for readability */
+      @media (max-width: 1100px) {
+        .rating-box {
+          position: static;
+          max-width: 800px;
+          margin: 12px auto 0;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="site-header">
@@ -19,12 +49,36 @@
       <nav class="nav">
         <a href="index.html" class="active">Home</a>
         <a href="info.html">Info</a>
+        <a href="why.html">Why</a>
         <a href="rate.html">Rate a Culvert</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero">
+      <section class="hero layered">
+        <aside class="card rating-box" aria-label="Rating scale explanation">
+          <h2>Condition Rating Scale (1–5)</h2>
+          <p>
+            <strong>1 – Poor:</strong> Severe deterioration; likely needs
+            priority inspection.
+          </p>
+          <p>
+            <strong>2 – Fair:</strong> Notable issues; increased monitoring
+            recommended.
+          </p>
+          <p><strong>3 – Moderate:</strong> Serviceable with emerging risks.</p>
+          <p><strong>4 – Good:</strong> Minor wear; generally satisfactory.</p>
+          <p>
+            <strong>5 – Excellent:</strong> No significant defects observed.
+          </p>
+          <a
+            class="btn-link"
+            href="conversions.html"
+            aria-label="Open state conversions"
+            >View State Conversions(Still empty)</a
+          >
+        </aside>
+
         <img
           src="Images/Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
           alt="Culvert at Tower Drive, Town of Seymour"
@@ -34,39 +88,44 @@
         />
         <div class="hero-overlay">
           <h1>Probabilistic Culvert Condition Rating</h1>
-          <p>Possibly more text here explaining something</p>
+          <p>Accurate, explainable, and fast.</p>
         </div>
       </section>
 
       <section class="cards">
         <a class="card card-link" href="info.html" aria-label="Project Info">
           <h2>Project Info</h2>
-          <p>Overview, team, and documentation.</p>
+          <p>Data sources and credits.</p>
+        </a>
+
+        <a
+          class="card card-link why-link"
+          href="why.html"
+          aria-label="Why This Project"
+        >
+          <h2>Why This Project</h2>
+          <p>Purpose, safety impact, and planning value.</p>
         </a>
 
         <a class="card card-link" href="rate.html" aria-label="Rate a Culvert">
           <h2>Rate a Culvert</h2>
-          <p>
-            Enter culvert details to get a 1–5 rating (backend coming soon).
-          </p>
+          <p>Input culvert details to get a rating.</p>
         </a>
       </section>
 
       <section class="blurb">
         <h3>What this site does</h3>
         <p>
-          Enter nine parameters—soil, environment, and culvert attributes—and
-          the system returns a predicted condition rating with explanations
-          (probabilities and factor importance) once the backend is connected.
-          No logins, no personal data, and designed to be fast and easy to use.
+          Enter soil and culvert parameters to receive a predicted condition
+          rating with probabilities and brief explanations, plus a downloadable
+          PDF of your inputs and result (export placeholder for now).
         </p>
       </section>
     </main>
 
     <footer class="site-footer">
       <small>
-        © 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari · Team
-        Charter & roles summarized here. :contentReference[oaicite:2]{index=2}
+        © 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari
       </small>
     </footer>
   </body>

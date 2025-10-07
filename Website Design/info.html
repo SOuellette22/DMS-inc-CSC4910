@@ -6,6 +6,13 @@
     <title>Project Info — DMS Inc.</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
+  <style>
+    /* Adds space between info boxes only on this page */
+    main.content-narrow .card {
+      margin-bottom: 40px; /* was ~20px, now gives more breathing room */
+    }
+  </style>
+
   <body>
     <header class="site-header">
       <div class="brand">
@@ -19,45 +26,59 @@
       <nav class="nav">
         <a href="index.html">Home</a>
         <a href="info.html" class="active">Info</a>
+        <a href="why.html">Why</a>
         <a href="rate.html">Rate a Culvert</a>
+        <a href="admin.html">Admin</a>
       </nav>
     </header>
 
     <main class="content-narrow">
       <h1>Project Information</h1>
-      <p class="lead">
-        This page will house detailed write-ups, references, and
-        acknowledgments.
-      </p>
+      <p class="lead">Where to find inputs and who built this tool.</p>
 
       <section class="card">
-        <h2>Vision</h2>
-        <p>
-          Build a web tool that predicts culvert condition ratings (1–5) with
-          transparent, interpretable outputs for DOTs and local agencies.
+        <h2>Where to Find Input Data</h2>
+        <ul class="simple-list">
+          <li>
+            <strong>Soil pH</strong> — Use state/USDA soil maps or local geotech
+            reports; valid range 0–14.
+          </li>
+          <li>
+            <strong>Electrical Conductivity</strong> — Soil survey data or site
+            sampling; value &gt; 0.
+          </li>
+          <li>
+            <strong>Drainage Class</strong> — USDA/NRCS classifications (e.g.,
+            Well Drained, Poorly Drained).
+          </li>
+          <li>
+            <strong>Flood Frequency</strong> — Local flood studies or hydrologic
+            records (None → Frequent).
+          </li>
+        </ul>
+        <p class="muted">
+          Acceptable ranges and enumerations mirror the project requirements and
+          UI constraints.
         </p>
       </section>
 
       <section class="card">
-        <h2>Team</h2>
-        <ul class="simple-list">
-          <li>Maxwell Sprogis — UI Lead & Project Manager</li>
-          <li>David Hamilton — Documentation Lead & Frontend</li>
-          <li>Sean Ouellette — Lead Backend Developer</li>
-        </ul>
-        <p class="muted">Roles per Team Charter.</p>
+        <h2>How Results Are Presented</h2>
+        <p>
+          The platform provides a 1–5 condition rating with a probability
+          distribution and short factor explanations to support decision-making
+          and documentation. (Export to PDF is planned.)
+        </p>
       </section>
 
       <section class="card">
-        <h2>Guiding Notes</h2>
+        <h2>Credits</h2>
         <ul class="simple-list">
-          <li>No user logins; open-access site.</li>
-          <li>Keep inputs simple; offer guidance/ranges.</li>
-          <li>
-            Backend will provide a rating plus explanations.
-            :contentReference[oaicite:5]{index=5}
-          </li>
+          <li>Maxwell Sprogis — UI Lead &amp; Project Manager</li>
+          <li>David Hamilton — Documentation Lead &amp; Frontend</li>
+          <li>Sean Ouellette — Lead Backend Developer</li>
         </ul>
+        <p class="muted">Per the Team Charter & Deliverables.</p>
       </section>
     </main>
 
