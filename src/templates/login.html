@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="active">Home</a>
+        <a href="/login">Login</a>
+        <a href="/admin">Admin</a>
+        <a href="/rate">Rate a Culvert</a>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p> 
+            {% endfor %}
+        {% endif%}
+    {% endwith %}
+
+    <h1>Login</h1>
+    <form method="POST" action="#">
+        <p>Username:</p>
+        <p><input type="text" name="username"></p>
+        <p>Password:</p>
+        <p><input type="password" name="password"></p>
+        <p><input type="submit" value="submit"></p>
+    </form>
+
+</html>

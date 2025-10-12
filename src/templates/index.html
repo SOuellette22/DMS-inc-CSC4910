@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Home Page</title>
+</head> 
+<body>
+    <nav class="nav">
+        <a href="/" class="active">Home</a>
+        <a href="/login">Login</a>
+        <a href="/admin">Admin</a>
+        <a href="/rate">Rate a Culvert</a>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p> 
+            {% endfor %}
+        {% endif%}
+    {% endwith %}
+
+    <h1>Home Page</h1>
+    <p>This is cool right</p>
+</body>
+</html>
