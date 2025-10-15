@@ -1,5 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 # TODO THIS STUFF NEEDS TO GO IN A CONFIG FILE
