@@ -3,7 +3,7 @@ from datetime import timedelta
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 # TODO THIS STUFF NEEDS TO GO IN A CONFIG FILE
 app.secret_key = "test" # TODO THIS NEEDS TO CHANGE
 app.permanent_session_lifetime = timedelta(hours=1)
@@ -38,6 +38,10 @@ def login():
             return redirect(url_for("admin", usr = username))
         
         return render_template("login.html")
+
+@app.route("/upload", methods=['GET', 'POST'])
+def upload():
+    return render_template("upload.html")
     
 
 @app.route("/admin")
