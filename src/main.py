@@ -38,6 +38,10 @@ def login():
             return redirect(url_for("admin", usr = username))
         
         return render_template("login.html")
+
+@app.route("/upload", methods=['GET', 'POST'])
+def upload():
+    return render_template("upload.html")
     
 
 @app.route("/admin")
