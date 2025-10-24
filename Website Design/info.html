@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Info — DMS Inc.</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <style>
+    /* Adds space between info boxes only on this page */
+    main.content-narrow .card {
+      margin-bottom: 40px; /* was ~20px, now gives more breathing room */
+    }
+  </style>
+
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img
+          src="Images/DMSCIRCLELOGO(DARK).PNG"
+          alt="DMS Inc. Logo"
+          class="brand-logo"
+        />
+        <span class="brand-text">DMS INC</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="info.html" class="active">Info</a>
+        <a href="why.html">Why</a>
+        <a href="rate.html">Rate a Culvert</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="content-narrow">
+      <h1>Project Information</h1>
+      <p class="lead">Where to find inputs and who built this tool.</p>
+
+      <section class="card">
+        <h2>Where to Find Input Data</h2>
+        <ul class="simple-list">
+          <li>
+            <strong>Soil pH</strong> — Use state/USDA soil maps or local geotech
+            reports; valid range 0–14.
+          </li>
+          <li>
+            <strong>Electrical Conductivity</strong> — Soil survey data or site
+            sampling; value &gt; 0.
+          </li>
+          <li>
+            <strong>Drainage Class</strong> — USDA/NRCS classifications (e.g.,
+            Well Drained, Poorly Drained).
+          </li>
+          <li>
+            <strong>Flood Frequency</strong> — Local flood studies or hydrologic
+            records (None → Frequent).
+          </li>
+        </ul>
+        <p class="muted">
+          Acceptable ranges and enumerations mirror the project requirements and
+          UI constraints.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>How Results Are Presented</h2>
+        <p>
+          The platform provides a 1–5 condition rating with a probability
+          distribution and short factor explanations to support decision-making
+          and documentation. (Export to PDF is planned.)
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Credits</h2>
+        <ul class="simple-list">
+          <li>Maxwell Sprogis — UI Lead &amp; Project Manager</li>
+          <li>David Hamilton — Documentation Lead &amp; Frontend</li>
+          <li>Sean Ouellette — Lead Backend Developer</li>
+        </ul>
+        <p class="muted">Per the Team Charter & Deliverables.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>© 2025 DMS Inc.</small>
+    </footer>
+  </body>
+</html>
