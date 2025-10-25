@@ -3,7 +3,7 @@ from authlib.integrations.flask_client import OAuth
 from api_key import *
 import pandas as pd
 
-from .models import Admin
+from ..models import Admin, AIModels
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
 oauth = OAuth(current_app)

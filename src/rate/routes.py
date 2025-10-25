@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
-from .models import AIModels
+from ..models import AIModels
 
 rate_bp = Blueprint("rate", __name__, template_folder="templates")
 
