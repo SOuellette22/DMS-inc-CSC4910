@@ -1,37 +1,54 @@
 from flask import render_template, request, session, redirect, url_for, flash
+from authlib.integrations.flask_client import OAuth
+from api_key import *
 
 from models import Admin, AIModels
 
 def register_routes(app, db):
+
+    oauth = OAuth(app)
+    google = oauth.register(
+        name='google',
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid profile email'},
+    )
+
     # This is the main page
     @app.route("/")
     def home():
         return render_template("index.html")
 
-    @app.route("/login", methods=["POST", "GET"])
+    @app.route("/login")
     def login():
-        # this checks to see if the HTTP message type is POST
-        if request.method == "POST":
-            # gets the password and username entered
-            password = request.form["password"]
-            username = request.form["username"]
+        try:
+            authorize_uri = url_for("authorize", _external=True)
+            return google.authorize_redirect(redirect_uri=authorize_uri)
+        except Exception as e:
+            app.logger.error(f"Error during login redirect: {e}")
+            return "Error during login redirect.", 500
 
-            # checks if the entered password is correct
-            if password != "password":
-                return render_template("login.html")
-            else:
-                session["username"] = username
-                session.permanent = True
-                flash("Login successful!")
-                return redirect(url_for("admin", usr=username))
-        else:
-            if "username" in session:
-                username = session["username"]
-                session.permanent = True
-                flash("Already Logged In!")
-                return redirect(url_for("admin", usr=username))
+    @app.route("/authorize")
+    def authorize():
+        token = google.authorize_access_token()
+        user_info = google.server_metadata['userinfo_endpoint']
+        resp = google.get(user_info)
+        user_info = resp.json()
+        email = user_info["email"]
 
-            return render_template("login.html")
+        admin_email = Admin.query.filter_by(email=email).first()
+        app.logger.info(f"Admin email: {admin_email}")
+        app.logger.info(f"Entered email: {email}")
+        if not admin_email:
+            flash("Access denied: You are not an admin.", "danger")
+            return redirect(url_for("home"))
+
+        session["username"] = email
+        session["token"] = token
+
+        flash(f"Welcome, {email}!", "success")
+        return redirect(url_for("admin", content=session['username']))
 
     @app.route("/upload", methods=['GET', 'POST'])
     def upload():
@@ -39,13 +56,7 @@ def register_routes(app, db):
 
     @app.route("/admin")
     def admin():
-        # This is a check to see if the user has logged in yet
-        if "username" in session:
-            return render_template("user.html", content=session["username"])
-
-        # if they are not logged in
-        flash("You are not logged in!")
-        return redirect(url_for("login"))
+        return render_template("admin.html", content = session['username'])
 
     @app.route("/logout")
     def logout():
