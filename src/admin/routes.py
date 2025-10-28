@@ -1,11 +1,11 @@
 # Imports needed for admin routes
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app
 from authlib.integrations.flask_client import OAuth
-from api_key import *
+from ..api_key import *
 import pandas as pd
 
 # Import models
-from models import Admin, AIModels
+from ..models import Admin, AIModels
 
 # Define the admin blueprint and OAuth
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
