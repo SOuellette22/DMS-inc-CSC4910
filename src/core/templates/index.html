@@ -1,8 +1,120 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}DMS Inc. – Culvert Rating{% endblock %}
+<style>
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    column-gap: 32px;
+    position: relative;
+  }
 
+  .rating-box {
+    position: static;
+    grid-column: 1;
+    justify-self: end;
+    max-width: 380px;
+    z-index: auto;
+  }
+
+  .hero-img {
+    display: block;
+    grid-column: 2;
+    margin: 0 auto;
+    max-width: min(100%, 900px);
+    height: auto;
+  }
+
+  @media (max-width: 900px) {
+    .home-grid {
+      grid-template-columns: 1fr;
+      row-gap: 16px;
+    }
+    .rating-box {
+      grid-column: 1;
+      justify-self: center;
+      max-width: 640px;
+    }
+    .hero-img {
+      grid-column: 1;
+    }
+  }
+</style>
 {% block content %}
-<h1>Home Page</h1>
-<p>This is cool right</p>
+<main>
+  <section class="hero layered">
+    <div class="home-grid">
+      <aside class="card rating-box" aria-label="Rating scale explanation">
+        <h2>Condition Rating Scale (1–5)</h2>
+        <p>
+          <strong>1 – Poor:</strong> Severe deterioration; likely needs
+          priority inspection.
+        </p>
+        <p>
+          <strong>2 – Fair:</strong> Notable issues; increased monitoring
+          recommended.
+        </p>
+        <p>
+          <strong>3 – Moderate:</strong> Serviceable with emerging risks.
+        </p>
+        <p>
+          <strong>4 – Good:</strong> Minor wear; generally satisfactory.
+        </p>
+        <p>
+          <strong>5 – Excellent:</strong> No significant defects observed.
+        </p>
+        <a
+          class="btn-link"
+          href="{{ url_for('core.conversions') }}"
+          aria-label="Open state conversions"
+          >View State Conversions (Still empty)</a
+        >
+      </aside>
+
+      <img
+        src="/img/Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
+        alt="Culvert at Tower Drive, Town of Seymour"
+        class="hero-img"
+        width="800"
+        height="475"
+      />
+    </div>
+
+    <div class="hero-overlay">
+      <h1>Probabilistic Culvert Condition Rating</h1>
+      <p>Accurate, explainable, and fast.</p>
+    </div>
+  </section>
+
+  <section class="cards">
+    <a class="card card-link" href="{{ url_for('core.info') }}" aria-label="Project Info">
+      <h2>Project Info</h2>
+      <p>Data sources and credits.</p>
+    </a>
+
+    <a
+      class="card card-link why-link"
+      href="{{ url_for('core.why') }}"
+      aria-label="Why This Project"
+    >
+      <h2>Why This Project</h2>
+      <p>Purpose, safety impact, and planning value.</p>
+    </a>
+
+    <a class="card card-link" href="{{ url_for('rate.index') }}" aria-label="Rate a Culvert">
+      <h2>Rate a Culvert</h2>
+      <p>Input culvert details to get a rating.</p>
+    </a>
+  </section>
+
+  <section class="blurb">
+    <h3>What this site does</h3>
+    <p>
+      Enter soil and culvert parameters to receive a predicted condition
+      rating with probabilities and brief explanations, plus a downloadable
+      PDF of your inputs and result (export placeholder for now).
+    </p>
+  </section>
+</main>
 {% endblock %}
