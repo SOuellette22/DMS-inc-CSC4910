@@ -1,31 +1,10 @@
-{% extends "base.html" %} {% block title %}Admin Page{% endblock %} {% block
-content %}
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DMS Inc. – Admin</title>
-    <link rel="stylesheet" href="/src/static/css/styles.css" />
-  </head>
-  <body>
-    <!-- Header and Nav -->
-    <header class="site-header">
-      <div class="brand">
-        <img
-          src="/src/static/img/DMSCIRCLELOGO(DARK).PNG"
-          alt="DMS Inc. Logo"
-          class="brand-logo"
-        />
-        <span class="brand-text">DMS INC</span>
-      </div>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="info.html">Info</a>
-        <a href="why.html">Why</a>
-        <a href="rate.html">Rate a Culvert</a>
-        <a href="admin.html" class="active">Admin</a>
-      </nav>
-    </header>
+{% extends "base.html" %}
+
+{% block title %}Admin — DMS Inc.{% endblock %}
+
+{% block adminActive %}class="active"{% endblock %}
+
+{% block content %}
 
     <main class="content-wide">
       <section class="card" style="margin-bottom: 18px">
@@ -367,6 +346,4 @@ content %}
         });
       }
     </script>
-  </body>
-</html>
 {% endblock %}
