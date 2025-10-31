@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}DMS Inc. – Culvert Rating{% endblock
+%}
 
-{% block title %}DMS Inc. – Culvert Rating{% endblock %}
 <style>
   .home-grid {
     display: grid;
@@ -48,22 +48,16 @@
       <aside class="card rating-box" aria-label="Rating scale explanation">
         <h2>Condition Rating Scale (1–5)</h2>
         <p>
-          <strong>1 – Poor:</strong> Severe deterioration; likely needs
-          priority inspection.
+          <strong>1 – Poor:</strong> Severe deterioration; likely needs priority
+          inspection.
         </p>
         <p>
           <strong>2 – Fair:</strong> Notable issues; increased monitoring
           recommended.
         </p>
-        <p>
-          <strong>3 – Moderate:</strong> Serviceable with emerging risks.
-        </p>
-        <p>
-          <strong>4 – Good:</strong> Minor wear; generally satisfactory.
-        </p>
-        <p>
-          <strong>5 – Excellent:</strong> No significant defects observed.
-        </p>
+        <p><strong>3 – Moderate:</strong> Serviceable with emerging risks.</p>
+        <p><strong>4 – Good:</strong> Minor wear; generally satisfactory.</p>
+        <p><strong>5 – Excellent:</strong> No significant defects observed.</p>
         <a
           class="btn-link"
           href="{{ url_for('core.conversions') }}"
@@ -88,7 +82,11 @@
   </section>
 
   <section class="cards">
-    <a class="card card-link" href="{{ url_for('core.info') }}" aria-label="Project Info">
+    <a
+      class="card card-link"
+      href="{{ url_for('core.info') }}"
+      aria-label="Project Info"
+    >
       <h2>Project Info</h2>
       <p>Data sources and credits.</p>
     </a>
@@ -102,7 +100,11 @@
       <p>Purpose, safety impact, and planning value.</p>
     </a>
 
-    <a class="card card-link" href="{{ url_for('rate.index') }}" aria-label="Rate a Culvert">
+    <a
+      class="card card-link"
+      href="{{ url_for('rate.index') }}"
+      aria-label="Rate a Culvert"
+    >
       <h2>Rate a Culvert</h2>
       <p>Input culvert details to get a rating.</p>
     </a>
@@ -111,9 +113,9 @@
   <section class="blurb">
     <h3>What this site does</h3>
     <p>
-      Enter soil and culvert parameters to receive a predicted condition
-      rating with probabilities and brief explanations, plus a downloadable
-      PDF of your inputs and result (export placeholder for now).
+      Enter soil and culvert parameters to receive a predicted condition rating
+      with probabilities and brief explanations, plus a downloadable PDF of your
+      inputs and result (export placeholder for now).
     </p>
   </section>
 </main>
