@@ -1,6 +1,29 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Rate a Culvert — DMS Inc.{% endblock
+%}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Rate a Culvert — DMS Inc.{% endblock %}</title>
+  <link rel="stylesheet" href="/src/static/css/styles.css" />
+</head>
 
-{% block title %}Rate a Culvert — DMS Inc.{% endblock %}
+<header class="site-header">
+  <div class="brand">
+    <img
+      src="{{ url_for('static', filename='Images/DMSCIRCLELOGO(DARK).PNG') }}"
+      alt="DMS Inc. Logo"
+      class="brand-logo"
+    />
+    <span class="brand-text">DMS INC</span>
+  </div>
+  <nav class="nav">
+    <a href="/src/core/templates/index.html">Home</a>
+    <a href="/src/core/templates/info.html">Info</a>
+    <a href="/src/core/templates/why.html">Why</a>
+    <a href="/src/rate/templates/rate.html" class="active">Rate a Culvert</a>
+    <a href="/src/admin/templates/admin.html">Admin</a>
+  </nav>
+</header>
 
 <style>
   /* Page-local only for tiny details spacing */
@@ -21,7 +44,7 @@
   <!-- Photo on top (kept as-is) -->
   <section class="hero">
     <img
-      src="/img/3d_sewer_storm_water_outlet_47_00001.jpg"
+      src="/src/static/img/3d_sewer_storm_water_outlet_47_00001.jpg"
       alt="3D storm water outlet rendering"
       class="hero-img"
       width="1920"
@@ -30,8 +53,8 @@
     <div class="hero-overlay">
       <h1>Enter Culvert Details</h1>
       <p class="lead">
-        Provide the required site and design attributes to generate a
-        condition rating.
+        Provide the required site and design attributes to generate a condition
+        rating.
       </p>
     </div>
   </section>
@@ -139,8 +162,7 @@
         <details class="more" data-more>
           <summary data-text="See more">See more</summary>
           <div class="muted">
-            Choose the closest category from local hydrologic
-            records/studies.
+            Choose the closest category from local hydrologic records/studies.
           </div>
         </details>
       </label>
@@ -182,8 +204,7 @@
         <details class="more" data-more>
           <summary data-text="See more">See more</summary>
           <div class="muted">
-            Select the cross-section shape. Model encodes shapes into
-            features.
+            Select the cross-section shape. Model encodes shapes into features.
           </div>
         </details>
       </label>
@@ -201,8 +222,8 @@
         <details class="more" data-more>
           <summary data-text="See more">See more</summary>
           <div class="muted">
-            Enter the linear distance from inlet to outlet along the
-            culvert’s axis (feet), not circumference.
+            Enter the linear distance from inlet to outlet along the culvert’s
+            axis (feet), not circumference.
           </div>
         </details>
       </label>
