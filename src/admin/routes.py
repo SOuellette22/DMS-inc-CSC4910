@@ -29,7 +29,7 @@ def index():
         return redirect(url_for("admin.login"))
     else:
         # If logged in, render the admin dashboard
-        return render_template("admin.html", content = session['username'])
+        return render_template("admin.html")
 
 @admin_bp.route("/login")
 def login():
@@ -67,7 +67,7 @@ def authorize():
 
     # Welcome the admin user
     flash(f"Welcome, {email}!", "success")
-    return redirect(url_for("admin.index", content=session['username']))
+    return redirect(url_for("admin.index"))
 
 @admin_bp.route("/upload", methods=['GET', 'POST'])
 def upload():

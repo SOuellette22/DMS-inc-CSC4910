@@ -17,8 +17,18 @@ def index():
         culvert_length = request.form["culvert_length"]
         culvert_age = request.form["culvert_age"]
 
-        # Here you would typically save the rating to the database
-        flash(f"Rating submitted: Soil PH: {soil_ph}, Soil Drainage: {soil_drainage}, Soil Moisture: {soil_moisture}, Soil EC: {soil_ec}, Flood Frequency: {flood_frequency}, Culvert Material: {culvert_material}, Culvert Shape: {culvert_shape}, Culvert Length: {culvert_length}, Culvert Age: {culvert_age}")
-        return redirect(url_for("core.home"))
+        # TODO: David this is where you will process the data and output it to the user
+        flash(f"Rating Submitted Properly", "success")
+        flash(f"Soil pH: {soil_ph}", "info")
+        flash(f"Soil Drainage: {soil_drainage}", "info")
+        flash(f"Soil Moisture: {soil_moisture}", "info")
+        flash(f"Soil Eclectic Conductivity: {soil_ec}", "info")
+        flash(f"Flood Frequency: {flood_frequency}", "info")
+        flash(f"Culvert Material: {culvert_material}", "info")
+        flash(f"Culvert Shape: {culvert_shape}", "info")
+        flash(f"Culvert Length: {culvert_length}", "info")
+        flash(f"Culvert Age: {culvert_age}", "info")
+
+        return redirect(url_for("core.home")) # TODO: Change this to the results page when available
 
     return render_template("rate.html")
