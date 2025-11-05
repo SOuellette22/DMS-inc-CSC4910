@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DMS Inc. – Culvert Rating</title>
+
+    <!-- this is: optional external stylesheet if you have one -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      /* this is: THEME TOKENS (light + dark variables used across the site) */
+      :root {
+        color-scheme: light;
+        --bg: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --card: #f9fafb;
+        --card-elev: #ffffff;
+        --border: #e5e7eb;
+        --link: #2563eb;
+        --accent: #2563eb;
+        --overlay: rgba(0, 0, 0, 0.45);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+        /* this is: layout tuning for hero overlay height */
+        --hero-overlay-space: 96px;
+        --page-max: 1200px; /* this is: global max width */
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0b0f19;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --card: #101626;
+        --card-elev: #0f1423;
+        --border: #1f2937;
+        --link: #60a5fa;
+        --accent: #60a5fa;
+        --overlay: rgba(0, 0, 0, 0.5);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      }
+
+      /* this is: BASE GLOBAL STYLES */
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter,
+          Arial, sans-serif;
+      }
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* this is: HEADER AND NAVBAR */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .brand-logo {
+        height: 44px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
+      .brand-text {
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .nav {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .nav a {
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        color: var(--text);
+        border: 1px solid transparent;
+      }
+      .nav a.active {
+        background: var(--card-elev);
+        border-color: var(--border);
+        text-decoration: none;
+      }
+
+      /* this is: THEME TOGGLE BUTTON */
+      .vh {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .theme-switch {
+        appearance: none;
+        position: relative;
+        display: inline-grid;
+        grid-auto-flow: column;
+        align-items: center;
+        justify-items: center;
+        width: 100px;
+        height: 44px;
+        border-radius: 9999px;
+        background: var(--card-elev);
+        border: 1px solid var(--border);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: background 0.16s, border-color 0.16s, box-shadow 0.16s,
+          color 0.16s;
+      }
+      .theme-switch__sun {
+        justify-self: start;
+        margin-left: 14px;
+      }
+      .theme-switch__moon {
+        justify-self: end;
+        margin-right: 14px;
+      }
+      .theme-switch__sun,
+      .theme-switch__moon {
+        font-size: 18px;
+        opacity: 0.9;
+        pointer-events: none;
+        z-index: 1;
+        user-select: none;
+      }
+      .theme-switch__knob {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+        transition: left 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+          background 0.16s, border-color 0.16s;
+        pointer-events: none;
+      }
+      :root[data-theme="dark"] .theme-switch__knob {
+        left: calc(100% - 4px - 36px);
+      }
+
+      /* this is: CONTAINERS */
+      .wrap {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      /* this is: HERO SECTION (balanced + non-overlapping) */
+      .hero {
+        position: relative;
+        margin: 12px auto 24px;
+        padding-bottom: var(
+          --hero-overlay-space
+        ); /* this is: reserve space for overlay */
+        border-radius: 16px;
+        overflow: clip;
+        background: transparent;
+      }
+      .hero-inner {
+        /* this is: two-column layout for balance */
+        display: grid;
+        align-items: center;
+        column-gap: 28px;
+        grid-template-columns: 1.05fr 1.35fr; /* this is: slightly larger image column */
+      }
+      .rating-box {
+        justify-self: end;
+        max-width: 420px;
+      }
+      .hero-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      .hero-overlay {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 0;
+        padding: 16px 18px 18px;
+        color: #fff;
+        background: linear-gradient(to top, var(--overlay), transparent 65%);
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+      }
+      .hero-overlay h1 {
+        margin: 0 0 4px;
+        font-size: clamp(22px, 3.2vw, 40px);
+      }
+      .hero-overlay p {
+        margin: 0;
+        opacity: 0.95;
+      }
+
+      /* this is: responsive tweaks for hero */
+      @media (max-width: 980px) {
+        :root {
+          --hero-overlay-space: 84px;
+        }
+        .hero-inner {
+          grid-template-columns: 1fr 1fr;
+          column-gap: 20px;
+        }
+        .rating-box {
+          justify-self: center;
+          max-width: 520px;
+        }
+      }
+      @media (max-width: 680px) {
+        :root {
+          --hero-overlay-space: 72px;
+        }
+        .hero-inner {
+          grid-template-columns: 1fr;
+          row-gap: 16px;
+        }
+        .rating-box {
+          justify-self: stretch;
+        }
+      }
+
+      /* this is: CARDS + FOOTER */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+      }
+      .card-link:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+      .cards {
+        max-width: var(--page-max);
+        margin: 28px auto 36px;
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .blurb {
+        max-width: 900px;
+        margin: 0 auto 16px;
+        padding: 0 16px;
+      }
+      .site-footer {
+        margin-top: 28px;
+        padding: 16px;
+        border-top: 1px solid var(--border);
+        background: var(--card);
+        text-align: center;
+        color: var(--muted);
+      }
+
+      /* this is: small-screen header logo size tweak */
+      @media (max-width: 740px) {
+        .brand-logo {
+          height: 38px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- this is: HEADER (brand, nav, and theme toggle) -->
+    <header class="site-header">
+      <div class="brand">
+        <img
+          id="brand-logo"
+          src="Images/DMSLOGO.PNG"
+          alt="DMS Inc. Logo"
+          class="brand-logo"
+        />
+        <span class="brand-text">DMS INC</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="info.html">Info</a>
+        <a href="why.html">Why</a>
+        <a href="rate.html">Rate a Culvert</a>
+      </nav>
+
+      <button
+        id="theme-toggle"
+        class="theme-switch"
+        aria-pressed="false"
+        title="Toggle theme"
+      >
+        <span class="vh">Toggle theme</span>
+        <span class="theme-switch__sun" aria-hidden="true">☀️</span>
+        <span class="theme-switch__moon" aria-hidden="true">🌙</span>
+        <span class="theme-switch__knob" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <!-- this is: MAIN CONTENT -->
+    <main>
+      <section class="hero wrap">
+        <div class="hero-inner">
+          <aside class="card rating-box" aria-label="Rating scale explanation">
+            <h2>Condition Rating Scale (1–5)</h2>
+            <p>
+              <strong>1 – Poor:</strong> Severe deterioration; likely needs
+              priority inspection.
+            </p>
+            <p>
+              <strong>2 – Fair:</strong> Notable issues; increased monitoring
+              recommended.
+            </p>
+            <p>
+              <strong>3 – Moderate:</strong> Serviceable with emerging risks.
+            </p>
+            <p>
+              <strong>4 – Good:</strong> Minor wear; generally satisfactory.
+            </p>
+            <p>
+              <strong>5 – Excellent:</strong> No significant defects observed.
+            </p>
+            <a class="btn-link" href="conversions.html"
+              >View State Conversions (Still empty)</a
+            >
+          </aside>
+
+          <img
+            src="Images/Town-of-Seymour-Tower-Drive_2117-PRINT.jpg"
+            alt="Culvert at Tower Drive, Town of Seymour"
+            class="hero-img"
+            width="800"
+            height="475"
+          />
+        </div>
+
+        <div class="hero-overlay">
+          <h1>Probabilistic Culvert Condition Rating</h1>
+          <p>Accurate, explainable, and fast.</p>
+        </div>
+      </section>
+
+      <section class="cards">
+        <a class="card card-link" href="info.html">
+          <h2>Project Info</h2>
+          <p>Data sources and credits.</p>
+        </a>
+        <a class="card card-link" href="why.html">
+          <h2>Why This Project</h2>
+          <p>Purpose, safety impact, and planning value.</p>
+        </a>
+        <a class="card card-link" href="rate.html">
+          <h2>Rate a Culvert</h2>
+          <p>Input culvert details to get a rating.</p>
+        </a>
+      </section>
+
+      <section class="blurb">
+        <h3>What this site does</h3>
+        <p>
+          Enter soil and culvert parameters to receive a predicted condition
+          rating with probabilities and explanations, plus a downloadable PDF
+          placeholder.
+        </p>
+      </section>
+    </main>
+
+    <!-- this is: FOOTER -->
+    <footer class="site-footer">
+      <small
+        >© 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari</small
+      >
+    </footer>
+
+    <!-- this is: THEME SCRIPT (handles theme toggle + logo switch) -->
+    <script>
+      (function () {
+        const STORAGE_KEY = "theme-preference";
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        const logo = document.getElementById("brand-logo");
+
+        const LIGHT_LOGO = "Images/DMSLOGO.PNG";
+        const DARK_LOGO = "Images/DMSCIRCLELOGO(DARK).PNG";
+
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+        const initial = stored ?? (prefersDark ? "dark" : "light");
+        setTheme(initial);
+
+        toggle.addEventListener("click", () => {
+          const next =
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next, true);
+        });
+
+        const mq = matchMedia("(prefers-color-scheme: dark)");
+        mq.addEventListener?.("change", (e) => {
+          if (!localStorage.getItem(STORAGE_KEY))
+            setTheme(e.matches ? "dark" : "light");
+        });
+
+        function setTheme(mode, persist = false) {
+          root.setAttribute("data-theme", mode);
+          if (persist) localStorage.setItem(STORAGE_KEY, mode);
+          toggle.setAttribute("aria-pressed", String(mode === "dark"));
+          logo.src =
+            mode === "dark"
+              ? DARK_LOGO
+              : LIGHT_LOGO; /* this is: swap logo to match theme */
+        }
+      })();
+    </script>
+  </body>
+</html>
