@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Project Information – DMS Inc.{% endblock %}
+
+{% block infoActive %}class="active"{% endblock %}
+
+{% block content %}
+<style>
+/* Adds space between info boxes only on this page */
+main.content-narrow .card {
+  margin-bottom: 40px; /* was ~20px, now gives more breathing room */
+}
+</style>
+
+<main class="content-narrow">
+  <h1>Project Information</h1>
+  <p class="lead">Where to find inputs and who built this tool.</p>
+
+  <section class="card">
+    <h2>Where to Find Input Data</h2>
+    <ul class="simple-list">
+      <li>
+        <strong>Soil pH</strong> — Use state/USDA soil maps or local geotech
+        reports; valid range 0–14.
+      </li>
+      <li>
+        <strong>Electrical Conductivity</strong> — Soil survey data or site
+        sampling; value &gt; 0.
+      </li>
+      <li>
+        <strong>Drainage Class</strong> — USDA/NRCS classifications (e.g.,
+        Well Drained, Poorly Drained).
+      </li>
+      <li>
+        <strong>Flood Frequency</strong> — Local flood studies or hydrologic
+        records (None → Frequent).
+      </li>
+    </ul>
+    <p class="muted">
+      Acceptable ranges and enumerations mirror the project requirements and
+      UI constraints.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>How Results Are Presented</h2>
+    <p>
+      The platform provides a 1–5 condition rating with a probability
+      distribution and short factor explanations to support decision-making
+      and documentation. (Export to PDF is planned.)
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Credits</h2>
+    <ul class="simple-list">
+      <li>Maxwell Sprogis — UI Lead &amp; Project Manager</li>
+      <li>David Hamilton — Documentation Lead &amp; Frontend</li>
+      <li>Sean Ouellette — Lead Backend Developer</li>
+    </ul>
+    <p class="muted">Per the Team Charter & Deliverables.</p>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}Admin — DMS Inc.{% endblock %}
+
+{% block adminActive %}class="active"{% endblock %}
+
+{% block content %}
+
+    <main class="content-wide">
+      <section class="card" style="margin-bottom: 18px">
+        <h1 style="margin-bottom: 6px">Admin Dashboard</h1>
+        <p class="muted">
+          Manage datasets and models used by the Culvert Rating site.
+        </p>
+      </section>
+
+      <!-- Dataset -->
+      <section class="card" style="margin-bottom: 18px">
+        <h2 style="margin-bottom: 8px">Dataset Management</h2>
+        <p class="muted" style="margin-bottom: 16px">
+          Upload a file, preview it, then confirm to swap it in as the active
+          dataset.
+        </p>
+
+        <div class="rate-grid" style="margin-top: 8px">
+          <!-- upload + actions -->
+          <div class="card form-card">
+            <form
+              id="datasetUploadForm"
+              method="POST"
+              action="#"
+              enctype="multipart/form-data"
+              target="datasetPreviewFrame"
+              aria-describedby="dataset-help"
+            >
+              <fieldset class="field-grid">
+                <legend>Upload new dataset</legend>
+
+                <label for="dataset-file">
+                  Choose file
+                  <input
+                    id="dataset-file"
+                    name="file"
+                    type="file"
+                    accept=".csv,text/csv"
+                    required
+                    aria-required="true"
+                  />
+                </label>
+
+                <p id="dataset-file-name" class="helper">
+                  No file selected yet.
+                </p>
+                <p id="dataset-help" class="helper">
+                  Click “Preview” to render the file on the right. When it looks
+                  correct, click “Swap Dataset”.
+                </p>
+
+                <div class="actions">
+                  <button
+                    type="submit"
+                    id="dataset-preview-btn"
+                    class="btn"
+                    style="cursor: pointer"
+                  >
+                    Preview
+                  </button>
+                </div>
+              </fieldset>
+            </form>
+
+            <!-- Final swap -->
+            <form
+              id="datasetSwapForm"
+              method="POST"
+              action="#"
+              style="margin-top: 12px"
+            >
+              <!-- Swap datasets here -->
+              <button
+                type="button"
+                id="dataset-swap-btn"
+                class="btn"
+                style="cursor: pointer"
+              >
+                Swap Dataset
+              </button>
+            </form>
+          </div>
+
+          <!-- Dataset preview frame -->
+          <div class="card media-card" style="padding: 0">
+            <div
+              style="
+                border-bottom: 1px solid var(--outline);
+                padding: 12px 16px;
+              "
+            >
+              <strong>Preview</strong>
+              <span class="muted" style="margin-left: 8px"
+                >(CSV renders here)</span
+              >
+            </div>
+            <iframe
+              id="datasetPreviewFrame"
+              name="datasetPreviewFrame"
+              title="Dataset Preview"
+              style="width: 100%; height: 420px; border: 0; display: block"
+            >
+            </iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- Model Management -->
+      <section class="card">
+        <h2 style="margin-bottom: 8px">Model Management</h2>
+        <p class="muted" style="margin-bottom: 16px">
+          Upload a trained model, preview, then confirm to activate it.
+        </p>
+
+        <div class="rate-grid" style="margin-top: 8px">
+          <!-- model upload and actions -->
+          <div class="card form-card">
+            <form
+              id="modelUploadForm"
+              method="POST"
+              action="#"
+              enctype="multipart/form-data"
+              target="modelPreviewFrame"
+              aria-describedby="model-help"
+            >
+              <fieldset class="field-grid">
+                <legend>Upload new model</legend>
+
+                <label for="model-file">
+                  Choose model file
+                  <input
+                    id="model-file"
+                    name="model_file"
+                    type="file"
+                    accept=".pkl,.joblib,.pt,.onnx,application/octet-stream"
+                    required
+                    aria-required="true"
+                  />
+                </label>
+
+                <label for="model-name">
+                  Model name (display)
+                  <input
+                    id="model-name"
+                    name="model_name"
+                    type="text"
+                    placeholder="e.g., gradient_boost_v3"
+                    required
+                    aria-required="true"
+                  />
+                </label>
+
+                <label for="model-notes">
+                  Description / notes (optional)
+                  <input
+                    id="model-notes"
+                    name="description"
+                    type="text"
+                    placeholder="Short description (features, training date, etc.)"
+                  />
+                </label>
+
+                <p id="model-help" class="helper">
+                  “Preview” can return validation results (size, checksum) once
+                  wired to a backend endpoint.
+                </p>
+
+                <div class="actions">
+                  <button
+                    type="submit"
+                    id="model-preview-btn"
+                    class="btn"
+                    style="cursor: pointer"
+                  >
+                    Preview
+                  </button>
+                </div>
+              </fieldset>
+            </form>
+
+            <!-- Final confermation -->
+            <form
+              id="modelActivateForm"
+              method="POST"
+              action="#"
+              style="margin-top: 12px"
+            >
+              <!-- activate model here -->
+              <button
+                type="button"
+                id="model-activate-btn"
+                class="btn"
+                style="cursor: pointer"
+              >
+                Activate Model
+              </button>
+            </form>
+          </div>
+
+          <!-- model preview / messages -->
+          <div class="card media-card" style="padding: 0">
+            <div
+              style="
+                border-bottom: 1px solid var(--outline);
+                padding: 12px 16px;
+              "
+            >
+              <strong>Model Preview</strong>
+              <span class="muted" style="margin-left: 8px"
+                >(endpoint-defined content)</span
+              >
+            </div>
+            <iframe
+              id="modelPreviewFrame"
+              name="modelPreviewFrame"
+              title="Model Preview"
+              style="width: 100%; height: 280px; border: 0; display: block"
+            >
+            </iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Confirm dialogs -->
+    <dialog
+      id="confirmDatasetDialog"
+      style="
+        background: var(--panel);
+        color: var(--text);
+        border: 1px solid var(--outline);
+        border-radius: var(--radius);
+        padding: 18px;
+        max-width: 420px;
+      "
+    >
+      <h3 style="margin-bottom: 8px">Confirm Dataset Swap</h3>
+      <p class="muted" style="margin-bottom: 14px">
+        This will replace the current dataset with the uploaded CSV. Continue?
+      </p>
+      <div style="display: flex; gap: 8px; justify-content: flex-end">
+        <button id="datasetCancel" class="btn" style="cursor: pointer">
+          Cancel
+        </button>
+        <button id="datasetConfirm" class="btn" style="cursor: pointer">
+          Yes, swap dataset
+        </button>
+      </div>
+    </dialog>
+
+    <dialog
+      id="confirmModelDialog"
+      style="
+        background: var(--panel);
+        color: var(--text);
+        border: 1px solid var(--outline);
+        border-radius: var(--radius);
+        padding: 18px;
+        max-width: 420px;
+      "
+    >
+      <h3 style="margin-bottom: 8px">Confirm Model Activation</h3>
+      <p class="muted" style="margin-bottom: 14px">
+        This will activate the uploaded model as the live model. Continue?
+      </p>
+      <div style="display: flex; gap: 8px; justify-content: flex-end">
+        <button id="modelCancel" class="btn" style="cursor: pointer">
+          Cancel
+        </button>
+        <button id="modelConfirm" class="btn" style="cursor: pointer">
+          Yes, activate model
+        </button>
+      </div>
+    </dialog>
+
+    <script>
+      // Show selected filenames
+      const dsInput = document.getElementById("dataset-file");
+      const dsName = document.getElementById("dataset-file-name");
+      if (dsInput && dsName) {
+        dsInput.addEventListener("change", () => {
+          dsName.textContent = dsInput.files?.[0]?.name
+            ? `Selected: ${dsInput.files[0].name}`
+            : "No file selected yet.";
+        });
+      }
+
+      // Dataset confirm flow
+      const datasetSwapBtn = document.getElementById("dataset-swap-btn");
+      const datasetDialog = document.getElementById("confirmDatasetDialog");
+      const datasetCancel = document.getElementById("datasetCancel");
+      const datasetConfirm = document.getElementById("datasetConfirm");
+      const datasetSwapForm = document.getElementById("datasetSwapForm");
+
+      if (datasetSwapBtn && datasetDialog) {
+        datasetSwapBtn.addEventListener("click", () =>
+          datasetDialog.showModal()
+        );
+        datasetCancel.addEventListener("click", () => datasetDialog.close());
+        datasetConfirm.addEventListener("click", () => {
+          datasetDialog.close();
+          if (
+            datasetSwapForm &&
+            datasetSwapForm.action &&
+            !datasetSwapForm.action.endsWith("#")
+          ) {
+            datasetSwapForm.submit();
+          }
+        });
+      }
+
+      // Model confirm flow
+      const modelActivateBtn = document.getElementById("model-activate-btn");
+      const modelDialog = document.getElementById("confirmModelDialog");
+      const modelCancel = document.getElementById("modelCancel");
+      const modelConfirm = document.getElementById("modelConfirm");
+      const modelActivateForm = document.getElementById("modelActivateForm");
+
+      if (modelActivateBtn && modelDialog) {
+        modelActivateBtn.addEventListener("click", () =>
+          modelDialog.showModal()
+        );
+        modelCancel.addEventListener("click", () => modelDialog.close());
+        modelConfirm.addEventListener("click", () => {
+          modelDialog.close();
+          if (
+            modelActivateForm &&
+            modelActivateForm.action &&
+            !modelActivateForm.action.endsWith("#")
+          ) {
+            modelActivateForm.submit();
+          }
+        });
+      }
+    </script>
+{% endblock %}

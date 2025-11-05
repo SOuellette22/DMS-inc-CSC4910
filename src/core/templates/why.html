@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Why This Project – DMS Inc.{% endblock %}
+
+{% block whyActive %}class="active"{% endblock %}
+
+{% block content %}
+<style>
+    /* Adds more vertical separation between cards */
+    main.content-narrow .card {
+      margin-bottom: 40px;
+    }
+  </style>
+<main class="content-narrow">
+  <h1>Why This Project</h1>
+  <p class="lead">
+    Purpose, public safety impact, and cost-effective inspection planning.
+  </p>
+
+  <section class="card">
+    <h2>Purpose</h2>
+    <p>
+      Agencies manage large inventories of culverts with limited budgets. A
+      consistent, explainable, and fast screening tool helps triage
+      structures and standardize communications.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Impact on Public Safety</h2>
+    <p>
+      By highlighting higher-risk candidates sooner, the platform supports
+      proactive maintenance and reduces the chance of failures affecting
+      roads and communities. The 1–5 rating and probability view make risk
+      easier to communicate.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Cost-Effective Inspection Planning</h2>
+    <p>
+      Using lightweight, browser-based inputs, planners can prioritize
+      inspections and allocate crews where the expected benefit is
+      highest—without heavy workflows or new logins.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Design Notes</h2>
+    <p>
+      The UI emphasizes clarity and speed with clean pages, consistent
+      layout, and simple guidance. Export to PDF supports recordkeeping and
+      sharing of results.
+    </p>
+  </section>
+</main>
+{% endblock %}
