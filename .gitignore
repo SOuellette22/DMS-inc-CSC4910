@@ -1,6 +1,9 @@
 .idea
 src/api_key.py
 
+.github
+.vscode
+
 # Flask specific ingnored Files
 .venv/
 

@@ -1,27 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Title{% endblock %}</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!--    Flash Messaging Styles    -->
+    <style>
+        .flash-container {
+            position: fixed;
+            z-index: 1000;
+            top: 75px;
+            width: 800px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="active">Home</a>
-        <a href="{{ url_for('admin.login') }}">Login</a>
-        <a href="{{ url_for('admin.index') }}">Admin</a>
-        <a href="{{ url_for('rate.index') }}">Rate a Culvert</a>
-        <a href="{{ url_for('admin.upload') }}">Upload File</a>
-    </nav>
+    <header class="site-header">
+      <a class="brand" href="{{ url_for('core.home') }}">
+        <img
+          src="/img/DMSCIRCLELOGO(DARK).PNG"
+          alt="DMS Inc. Logo"
+          class="brand-logo"
+        />
+        <span class="brand-text">DMS INC</span>
+      </a>
+      <nav class="nav">
+        <a href="{{ url_for('core.home') }}" {% block homeActive %}{% endblock %}>Home</a>
+        <a href="{{ url_for('core.info') }}" {% block infoActive %}{% endblock %}>Info</a>
+        <a href="{{ url_for('core.why') }}" {% block whyActive %}{% endblock %}>Why</a>
+        <a href="{{ url_for('rate.index') }}" {% block rateActive %}{% endblock %}>Rate a Culvert</a>
+          <a href="{{ url_for('admin.index') }}" {% block adminActive %}{% endblock %}>Admin</a>
+      </nav>
+    </header>
 
-    {% with messages = get_flashed_messages() %}
+    <!--  This is the way that we display flash messages  -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
         {% endif%}
     {% endwith %}
 
     {% block content %}{% endblock %}
 
+    <footer class="site-footer">
+      <small>© 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari</small>
+    </footer>
+
+    <!--  This is the script to remove the flash messages after 3 seconds  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 3000); // Hide after 3 seconds (3000 milliseconds)
+            });
+        });
+    </script>
 </body>
 </html>
