@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Info — DMS Inc.</title>
+    <!-- this is shared styles with theme tokens -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- this is header with toggle so theme works on every page -->
+    <header class="site-header">
+      <div class="brand">
+        <img
+          src="Images/DMSCIRCLELOGO(DARK).PNG"
+          alt="DMS Inc. Logo"
+          class="brand-logo"
+        />
+        <span class="brand-text">DMS INC</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="info.html" class="active">Info</a>
+        <a href="rate.html">Rate a Culvert</a>
+      </nav>
+
+      <!-- this is the same toggle button used sitewide -->
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-pressed="false"
+        title="Toggle theme"
+      >
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+        <span class="theme-toggle__label">Theme</span>
+      </button>
+    </header>
+
+    <!-- this is the main content with a narrower width -->
+    <main class="content-narrow">
+      <h1>Project Information</h1>
+      <p class="lead">
+        This page will house detailed write-ups, references, and
+        acknowledgments.
+      </p>
+
+      <section class="card">
+        <h2>Vision</h2>
+        <p>
+          Build a web tool that predicts culvert condition ratings (1–5) with
+          transparent, interpretable outputs for DOTs and local agencies.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Team</h2>
+        <ul class="simple-list">
+          <li>Maxwell Sprogis — UI Lead & Project Manager</li>
+          <li>David Hamilton — Documentation Lead & Frontend</li>
+          <li>Sean Ouellette — Lead Backend Developer</li>
+        </ul>
+        <p class="muted">Roles per Team Charter.</p>
+      </section>
+
+      <section class="card">
+        <h2>Guiding Notes</h2>
+        <ul class="simple-list">
+          <li>No user logins; open-access site.</li>
+          <li>Keep inputs simple; offer guidance/ranges.</li>
+          <li>Backend will provide a rating plus explanations.</li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- this is the footer -->
+    <footer class="site-footer">
+      <small>© 2025 DMS Inc.</small>
+    </footer>
+
+    <!-- this is the inline theme controller (same as index.html) -->
+    <script>
+      // this is the theme controller: reads system/user preference, toggles data-theme, and updates the button
+      (function () {
+        const STORAGE_KEY = "theme-preference";
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        if (!toggle) return;
+
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+        const initial = stored ?? (prefersDark ? "dark" : "light");
+        setTheme(initial);
+
+        toggle.addEventListener("click", () => {
+          const next =
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next, true);
+        });
+
+        const mq = matchMedia("(prefers-color-scheme: dark)");
+        mq.addEventListener?.("change", (e) => {
+          if (!localStorage.getItem(STORAGE_KEY))
+            setTheme(e.matches ? "dark" : "light");
+        });
+
+        function setTheme(mode, persist = false) {
+          root.setAttribute("data-theme", mode);
+          if (persist) localStorage.setItem(STORAGE_KEY, mode);
+          const isDark = mode === "dark";
+          toggle.setAttribute("aria-pressed", String(isDark));
+          const icon = toggle.querySelector(".theme-toggle__icon");
+          if (icon) icon.textContent = isDark ? "" : "";
+        }
+      })();
+    </script>
+  </body>
+</html>

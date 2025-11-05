@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rate a Culvert — DMS Inc.</title>
+    <!-- this is shared styles with theme tokens -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- this is header with toggle -->
+    <header class="site-header">
+      <div class="brand">
+        <img
+          src="Images/DMSCIRCLELOGO(DARK).PNG"
+          alt="DMS Inc. Logo"
+          class="brand-logo"
+        />
+        <span class="brand-text">DMS INC</span>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="info.html">Info</a>
+        <a href="rate.html" class="active">Rate a Culvert</a>
+      </nav>
+
+      <!-- this is the theme toggle button -->
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-pressed="false"
+        title="Toggle theme"
+      >
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+        <span class="theme-toggle__label">Theme</span>
+      </button>
+    </header>
+
+    <!-- this is main content with hero photo and form -->
+    <main class="content-narrow">
+      <section class="hero">
+        <img
+          src="./3d_sewer_storm_water_outlet_47_00001.jpg"
+          alt="3D storm water outlet rendering"
+          class="hero-img"
+          width="1920"
+          height="1080"
+        />
+        <div class="hero-overlay">
+          <h1>Enter Culvert Details</h1>
+          <p class="lead">
+            Provide the required site and design attributes to generate a
+            condition rating. (Backend processing coming soon.)
+          </p>
+        </div>
+      </section>
+
+      <form
+        class="card form-card"
+        action="#"
+        method="post"
+        onsubmit="return false;"
+      >
+        <fieldset class="field-grid">
+          <legend>Soil &amp; Environment</legend>
+
+          <label>
+            <span>Soil pH (0–14)</span>
+            <input
+              type="number"
+              name="soil_ph"
+              step="0.1"
+              min="0"
+              max="14"
+              placeholder="e.g., 6.8"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Soil Drainage Class</span>
+            <select name="soil_drainage" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Very Poorly Drained</option>
+              <option>Poorly Drained</option>
+              <option>Somewhat Poorly Drained</option>
+              <option>Moderately Poorly Drained</option>
+              <option>Well Drained</option>
+              <option>High</option>
+              <option>Somewhat Excessively Drained</option>
+              <option>Excessively Drained</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Soil Moisture (%)</span>
+            <input
+              type="number"
+              name="soil_moisture"
+              step="0.1"
+              min="0"
+              max="100"
+              placeholder="0–100"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Soil Electrical Conductivity (&gt; 0)</span>
+            <input
+              type="number"
+              name="soil_ec"
+              step="0.01"
+              min="0.000001"
+              placeholder="e.g., 1.25"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Flood Frequency</span>
+            <select name="flood_frequency" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>None</option>
+              <option>Very Rare</option>
+              <option>Rare</option>
+              <option>Occasional</option>
+              <option>Frequent</option>
+            </select>
+          </label>
+
+          <legend>Culvert Attributes</legend>
+
+          <label>
+            <span>Culvert Material</span>
+            <select name="culvert_material" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Aluminum</option>
+              <option>Corrugated Steel</option>
+              <option>HDPE</option>
+              <option>PVC</option>
+              <option>Steel Plate</option>
+              <option>Reinforced Concrete</option>
+              <option>Unreinforced Concrete</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Culvert Shape</span>
+            <select name="culvert_shape" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Box</option>
+              <option>Round</option>
+              <option>Arch</option>
+              <option>Drop Inlet</option>
+              <option>Ellipse</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Culvert Length (ft)</span>
+            <input
+              type="number"
+              name="culvert_length"
+              step="0.1"
+              min="0.000001"
+              placeholder="&gt; 0"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Culvert Age (years)</span>
+            <input
+              type="number"
+              name="culvert_age"
+              step="1"
+              min="0"
+              placeholder="≥ 0"
+              required
+            />
+          </label>
+
+          <p class="helper">
+            Inputs and allowable ranges per project requirements. Rating scale:
+            1 (poor) to 5 (excellent).
+          </p>
+
+          <div class="actions">
+            <button class="btn" type="submit" title="Placeholder only">
+              Get Rating (Coming Soon)
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </main>
+
+    <!-- this is footer -->
+    <footer class="site-footer">
+      <small>© 2025 DMS Inc.</small>
+    </footer>
+
+    <!-- this is the inline theme controller (same as index.html) -->
+    <script>
+      // this is the theme controller: reads system/user preference, toggles data-theme, and updates the button
+      (function () {
+        const STORAGE_KEY = "theme-preference";
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        if (!toggle) return;
+
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+        const initial = stored ?? (prefersDark ? "dark" : "light");
+        setTheme(initial);
+
+        toggle.addEventListener("click", () => {
+          const next =
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next, true);
+        });
+
+        const mq = matchMedia("(prefers-color-scheme: dark)");
+        mq.addEventListener?.("change", (e) => {
+          if (!localStorage.getItem(STORAGE_KEY))
+            setTheme(e.matches ? "dark" : "light");
+        });
+
+        function setTheme(mode, persist = false) {
+          root.setAttribute("data-theme", mode);
+          if (persist) localStorage.setItem(STORAGE_KEY, mode);
+          const isDark = mode === "dark";
+          toggle.setAttribute("aria-pressed", String(isDark));
+          const icon = toggle.querySelector(".theme-toggle__icon");
+          if (icon) icon.textContent = isDark ? "" : "";
+        }
+      })();
+    </script>
+  </body>
+</html>
