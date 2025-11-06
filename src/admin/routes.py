@@ -1,4 +1,6 @@
 # Imports needed for admin routes
+from crypt import methods
+
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app
 from authlib.integrations.flask_client import OAuth
 from api_key import *
@@ -30,6 +32,42 @@ def index():
     else:
         # If logged in, render the admin dashboard
         return render_template("admin.html")
+
+@admin_bp.route("/", methods=['POST'])
+def admin_post():
+    # Handle POST requests to the admin index
+
+    # Handles the preview of the dataset
+    if "dataset-preview" in request.form:
+        file = request.files.get('file') # saves the file uploaded
+
+        # Checks to make sure that the file is a CSV
+        if file and file.content_type == 'text/csv':
+            df = pd.read_csv(file)
+            preview_html = df.head().to_html()
+            css = """
+            <style type="text/css" media="screen" style="width:100%">
+                table, th, td {background-color: #0; padding: 10px;}
+                th {background-color: #0b0b0f; shadow:0 10px 30px rgba(0, 0, 0, 0.35); color:white; font-family: Tahoma;font-size : 13; text-align: center;}
+                td {background-color: #0b0b0f; shadow:0 10px 30px rgba(0, 0, 0, 0.35); color:white; padding: 10px; font-family: Calibri; font-size : 12; text-align: center;}
+            </style>
+            """
+            # returns the CSS styling along with the preview HTML into the IFrame
+            return css + preview_html
+
+    # Handles dataset swapping
+    elif "dataset-swap" in request.form:
+        file = request.files.get('file')
+
+        # Checks to make sure that the file is a CSV
+        if file and file.content_type == 'text/csv':
+            df = pd.read_csv(file)
+            flash("Dataset swapped successfully.", "success")
+            return redirect(url_for("admin.index"))
+
+    flash("No valid action specified.", "danger")
+
+    return redirect(url_for("admin.index"))
 
 @admin_bp.route("/login")
 def login():

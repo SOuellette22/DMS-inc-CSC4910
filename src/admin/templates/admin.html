@@ -28,9 +28,8 @@
             <form
               id="datasetUploadForm"
               method="POST"
-              action="#"
+              action="{{ url_for('admin.index') }}"
               enctype="multipart/form-data"
-              target="datasetPreviewFrame"
               aria-describedby="dataset-help"
             >
               <fieldset class="field-grid">
@@ -62,6 +61,7 @@
                     id="dataset-preview-btn"
                     class="btn"
                     style="cursor: pointer"
+                    name="dataset-preview"
                   >
                     Preview
                   </button>
@@ -69,23 +69,15 @@
               </fieldset>
             </form>
 
-            <!-- Final swap -->
-            <form
-              id="datasetSwapForm"
-              method="POST"
-              action="#"
-              style="margin-top: 12px"
+            <!-- Swap datasets here -->
+            <button
+              type="button"
+              id="dataset-swap-btn"
+              class="btn"
+              style="cursor: pointer; margin-top: 12px"
             >
-              <!-- Swap datasets here -->
-              <button
-                type="button"
-                id="dataset-swap-btn"
-                class="btn"
-                style="cursor: pointer"
-              >
-                Swap Dataset
-              </button>
-            </form>
+              Swap Dataset
+            </button>
           </div>
 
           <!-- Dataset preview frame -->
@@ -249,7 +241,7 @@
         <button id="datasetCancel" class="btn" style="cursor: pointer">
           Cancel
         </button>
-        <button id="datasetConfirm" class="btn" style="cursor: pointer">
+        <button type="submit" form="datasetUploadForm" id="datasetConfirm" class="btn" style="cursor: pointer" name="dataset-swap">
           Yes, swap dataset
         </button>
       </div>
@@ -297,24 +289,23 @@
       const datasetDialog = document.getElementById("confirmDatasetDialog");
       const datasetCancel = document.getElementById("datasetCancel");
       const datasetConfirm = document.getElementById("datasetConfirm");
-      const datasetSwapForm = document.getElementById("datasetSwapForm");
+      const datasetUploadForm = document.getElementById("datasetUploadForm");
 
-      if (datasetSwapBtn && datasetDialog) {
-        datasetSwapBtn.addEventListener("click", () =>
-          datasetDialog.showModal()
-        );
-        datasetCancel.addEventListener("click", () => datasetDialog.close());
-        datasetConfirm.addEventListener("click", () => {
-          datasetDialog.close();
-          if (
-            datasetSwapForm &&
-            datasetSwapForm.action &&
-            !datasetSwapForm.action.endsWith("#")
-          ) {
-            datasetSwapForm.submit();
-          }
-        });
-      }
+      // This is the JS that allows the confirmation window to pop up and submit the form
+      datasetSwapBtn.addEventListener("click", () =>
+        datasetDialog.showModal()
+      );
+      datasetCancel.addEventListener("click", () => datasetDialog.close());
+      datasetConfirm.addEventListener("click", () => {
+        datasetDialog.close();
+        datasetUploadForm.target = "";
+      });
+
+      // This handles that preview of the dataset in the iframe
+      const datasetPreviewBtn = document.getElementById("dataset-preview-btn");
+      datasetPreviewBtn.addEventListener("click", () => {
+        datasetUploadForm.target = "datasetPreviewFrame";
+      });
 
       // Model confirm flow
       const modelActivateBtn = document.getElementById("model-activate-btn");
