@@ -4,15 +4,329 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Rate a Culvert — DMS Inc.</title>
-    <!-- this is shared styles with theme tokens -->
+
+    <!-- this is: optional external stylesheet if you have one -->
     <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      /* this is: THEME TOKENS copied to match index.html */
+      :root {
+        color-scheme: light;
+        --bg: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --card: #f9fafb;
+        --card-elev: #ffffff;
+        --border: #e5e7eb;
+        --link: #2563eb;
+        --accent: #2563eb;
+        --overlay: rgba(0, 0, 0, 0.45);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+        /* this is: layout vars */
+        --page-max: 1200px;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0b0f19;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --card: #101626;
+        --card-elev: #0f1423;
+        --border: #1f2937;
+        --link: #60a5fa;
+        --accent: #60a5fa;
+        --overlay: rgba(0, 0, 0, 0.5);
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      }
+
+      /* this is: BASE */
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter,
+          Arial, sans-serif;
+      }
+      a {
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* this is: HEADER and NAV (same structure as index) */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .brand-logo {
+        height: 44px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
+      .brand-text {
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .nav {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .nav a {
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        color: var(--text);
+        border: 1px solid transparent;
+      }
+      .nav a.active {
+        background: var(--card-elev);
+        border-color: var(--border);
+        text-decoration: none;
+      }
+
+      /* this is: THEME TOGGLE (identical behavior to index) */
+      .vh {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .theme-switch {
+        appearance: none;
+        position: relative;
+        display: inline-grid;
+        grid-auto-flow: column;
+        align-items: center;
+        justify-items: center;
+        width: 100px;
+        height: 44px;
+        border-radius: 9999px;
+        background: var(--card-elev);
+        border: 1px solid var(--border);
+        color: var(--text);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: background 0.16s, border-color 0.16s, box-shadow 0.16s,
+          color 0.16s;
+      }
+      .theme-switch__sun {
+        justify-self: start;
+        margin-left: 14px;
+      }
+      .theme-switch__moon {
+        justify-self: end;
+        margin-right: 14px;
+      }
+      .theme-switch__sun,
+      .theme-switch__moon {
+        font-size: 18px;
+        opacity: 0.9;
+        pointer-events: none;
+        z-index: 1;
+        user-select: none;
+      }
+      .theme-switch__knob {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+        transition: left 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+          background 0.16s, border-color 0.16s;
+        pointer-events: none;
+      }
+      :root[data-theme="dark"] .theme-switch__knob {
+        left: calc(100% - 4px - 36px);
+      }
+
+      /* this is: WRAPPER */
+      .wrap {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      /* this is: HERO with separate “bubble” caption card */
+      .hero {
+        margin: 16px auto 12px;
+        border-radius: 16px;
+        overflow: clip;
+      }
+      .hero-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+      }
+      /* this is: a stand-alone caption card (not overlay) */
+      .hero-caption {
+        max-width: var(--page-max);
+        margin: -18px auto 22px; /* this is: hug the image but stay separate */
+        padding: 16px 18px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+      .hero-caption h1 {
+        margin: 0 0 6px;
+        font-size: clamp(22px, 3.2vw, 40px);
+      }
+      .hero-caption p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      /* this is: CARDS + FORM */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+      }
+      .cards {
+        max-width: var(--page-max);
+        margin: 28px auto 36px;
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .card-link:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+      .content-narrow {
+        max-width: 900px;
+        margin: 0 auto 36px;
+        padding: 0 16px;
+      }
+
+      /* this is: FORM grid uses your global styles from styles.css */
+      .form-card {
+        margin: 0 16px 20px;
+      }
+      .field-grid {
+        display: grid;
+        gap: 0.9rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      legend {
+        grid-column: 1 / -1;
+        font-weight: 700;
+        margin-top: 0.25rem;
+      }
+      label {
+        display: grid;
+        gap: 0.35rem;
+      }
+      label span {
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+      input[type="number"],
+      select {
+        padding: 0.6rem 0.7rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card-elev);
+        color: var(--text);
+        outline: none;
+      }
+      input[type="number"]::placeholder {
+        color: color-mix(in oklab, var(--muted), transparent 35%);
+      }
+      input[type="number"]:focus,
+      select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px
+          color-mix(in oklab, var(--accent), transparent 75%);
+      }
+      .helper {
+        grid-column: 1 / -1;
+        color: var(--muted);
+        margin-top: 0.25rem;
+      }
+      .actions {
+        grid-column: 1 / -1;
+        margin-top: 0.3rem;
+      }
+      .btn {
+        padding: 0.7rem 1rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn:hover {
+        filter: brightness(1.05);
+      }
+
+      /* this is: FOOTER */
+      .site-footer {
+        margin-top: 28px;
+        padding: 16px;
+        border-top: 1px solid var(--border);
+        background: var(--card);
+        text-align: center;
+        color: var(--muted);
+      }
+
+      /* this is: small-screen header tweak */
+      @media (max-width: 740px) {
+        .brand-logo {
+          height: 38px;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <!-- this is header with toggle -->
+    <!-- this is: HEADER -->
     <header class="site-header">
       <div class="brand">
         <img
-          src="Images/DMSCIRCLELOGO(DARK).PNG"
+          id="brand-logo"
+          src="Images/DMSLOGO.PNG"
           alt="DMS Inc. Logo"
           class="brand-logo"
         />
@@ -22,47 +336,53 @@
       <nav class="nav">
         <a href="index.html">Home</a>
         <a href="info.html">Info</a>
+        <a href="why.html">Why</a>
         <a href="rate.html" class="active">Rate a Culvert</a>
       </nav>
 
-      <!-- this is the theme toggle button -->
       <button
         id="theme-toggle"
-        class="theme-toggle"
+        class="theme-switch"
         aria-pressed="false"
         title="Toggle theme"
       >
-        <span class="theme-toggle__icon" aria-hidden="true"></span>
-        <span class="theme-toggle__label">Theme</span>
+        <span class="vh">Toggle theme</span>
+        <span class="theme-switch__sun" aria-hidden="true">☀️</span>
+        <span class="theme-switch__moon" aria-hidden="true">🌙</span>
+        <span class="theme-switch__knob" aria-hidden="true"></span>
       </button>
     </header>
 
-    <!-- this is main content with hero photo and form -->
-    <main class="content-narrow">
-      <section class="hero">
-        <img
-          src="./3d_sewer_storm_water_outlet_47_00001.jpg"
-          alt="3D storm water outlet rendering"
-          class="hero-img"
-          width="1920"
-          height="1080"
-        />
-        <div class="hero-overlay">
-          <h1>Enter Culvert Details</h1>
-          <p class="lead">
-            Provide the required site and design attributes to generate a
-            condition rating. (Backend processing coming soon.)
-          </p>
-        </div>
-      </section>
+    <!-- this is: HERO IMAGE -->
+    <section class="hero wrap">
+      <img
+        src="Images/3d_sewer_storm_water_outlet_47_00001.jpg"
+        alt="3D storm water outlet rendering"
+        class="hero-img"
+        width="1920"
+        height="1080"
+      />
+    </section>
 
+    <!-- this is: SEPARATE BUBBLE CAPTION (not overlay) -->
+    <div class="hero-caption wrap">
+      <h1>Enter Culvert Details</h1>
+      <p>
+        Provide the required site and design attributes to generate a condition
+        rating. (Backend processing coming soon.)
+      </p>
+    </div>
+
+    <!-- this is: FORM -->
+    <main class="content-narrow">
       <form
         class="card form-card"
         action="#"
         method="post"
         onsubmit="return false;"
+        id="rate-form"
       >
-        <fieldset class="field-grid">
+        <fieldset class="field-grid" id="export-target">
           <legend>Soil &amp; Environment</legend>
 
           <label>
@@ -165,7 +485,7 @@
               name="culvert_length"
               step="0.1"
               min="0.000001"
-              placeholder="&gt; 0"
+              placeholder="> 0"
               required
             />
           </label>
@@ -183,32 +503,49 @@
           </label>
 
           <p class="helper">
-            Inputs and allowable ranges per project requirements. Rating scale:
-            1 (poor) to 5 (excellent).
+            Inputs follow project requirements. Rating is 1 (poor) to 5
+            (excellent).
           </p>
 
           <div class="actions">
-            <button class="btn" type="submit" title="Placeholder only">
+            <button class="btn" type="submit" disabled>
               Get Rating (Coming Soon)
             </button>
           </div>
         </fieldset>
       </form>
+
+      <!-- this is: QUICK LINKS / INFO CARDS (optional, keep or remove) -->
+      <section class="cards">
+        <a class="card card-link" href="info.html" aria-label="Project Info">
+          <h2>Project Info</h2>
+          <p>Data sources and credits.</p>
+        </a>
+        <a class="card card-link" href="why.html" aria-label="Why This Project">
+          <h2>Why This Project</h2>
+          <p>Purpose, safety impact, and planning value.</p>
+        </a>
+        <a class="card card-link" href="rate.html" aria-label="Rate a Culvert">
+          <h2>Rate a Culvert</h2>
+          <p>Input culvert details to get a rating.</p>
+        </a>
+      </section>
     </main>
 
-    <!-- this is footer -->
+    <!-- this is: FOOTER -->
     <footer class="site-footer">
-      <small>© 2025 DMS Inc.</small>
+      <small>© 2025 DMS Inc. · Capstone CSC4910</small>
     </footer>
 
-    <!-- this is the inline theme controller (same as index.html) -->
+    <!-- this is: THEME SCRIPT (same logic as index; fixes toggle state) -->
     <script>
-      // this is the theme controller: reads system/user preference, toggles data-theme, and updates the button
       (function () {
         const STORAGE_KEY = "theme-preference";
         const root = document.documentElement;
         const toggle = document.getElementById("theme-toggle");
-        if (!toggle) return;
+        const logo = document.getElementById("brand-logo");
+        const LIGHT_LOGO = "Images/DMSLOGO.PNG";
+        const DARK_LOGO = "Images/DMSCIRCLELOGO(DARK).PNG";
 
         const stored = localStorage.getItem(STORAGE_KEY);
         const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
@@ -230,10 +567,8 @@
         function setTheme(mode, persist = false) {
           root.setAttribute("data-theme", mode);
           if (persist) localStorage.setItem(STORAGE_KEY, mode);
-          const isDark = mode === "dark";
-          toggle.setAttribute("aria-pressed", String(isDark));
-          const icon = toggle.querySelector(".theme-toggle__icon");
-          if (icon) icon.textContent = isDark ? "" : "";
+          toggle.setAttribute("aria-pressed", String(mode === "dark"));
+          logo.src = mode === "dark" ? DARK_LOGO : LIGHT_LOGO;
         }
       })();
     </script>
