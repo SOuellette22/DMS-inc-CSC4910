@@ -1,6 +1,4 @@
 # Imports needed for admin routes
-from crypt import methods
-
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app
 from authlib.integrations.flask_client import OAuth
 from api_key import *
@@ -8,6 +6,7 @@ import pandas as pd
 
 # Import models
 from models import Admin, AIModels
+from admin.functions import *
 
 # Define the admin blueprint and OAuth
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
@@ -33,9 +32,14 @@ def index():
         # If logged in, render the admin dashboard
         return render_template("admin.html")
 
+# Admin POST route to handle form submissions
 @admin_bp.route("/", methods=['POST'])
 def admin_post():
-    # Handle POST requests to the admin index
+    correct_column_list = ['latitude', 'longitude', 'length',
+                           'cul_matl', 'cul_type', 'Soil_Drainage_Class',
+                           'Soil_Moisture', 'Soil_pH', 'Soil_Elec_Conductivity',
+                           'Soil_Surface_Texture','Flooding_Frequency',
+                           'State', 'Age', 'Cul_rating']
 
     # Handles the preview of the dataset
     if "dataset-preview" in request.form:
@@ -43,17 +47,25 @@ def admin_post():
 
         # Checks to make sure that the file is a CSV
         if file and file.content_type == 'text/csv':
+            # Reads the CSV into a DataFrame, generates a preview, and counts the number of rows
             df = pd.read_csv(file)
             preview_html = df.head().to_html()
-            css = """
-            <style type="text/css" media="screen" style="width:100%">
-                table, th, td {background-color: #0; padding: 10px;}
-                th {background-color: #0b0b0f; shadow:0 10px 30px rgba(0, 0, 0, 0.35); color:white; font-family: Tahoma;font-size : 13; text-align: center;}
-                td {background-color: #0b0b0f; shadow:0 10px 30px rgba(0, 0, 0, 0.35); color:white; padding: 10px; font-family: Calibri; font-size : 12; text-align: center;}
-            </style>
-            """
+            num_rows = len(df)
+
+            # Checks if the columns are correct and sets the flag accordingly
+            flag = True
+            for col in correct_column_list:
+                if col not in df.columns.to_list():
+                    flag = False
+                    break
+
+            # Checks if the columns are correct and generates the appropriate message
+            correct_csv = "<p style='color: red; margin-bottom: 2px; margin-top: -10px'>This dataset looks to not have the right columns</p>"
+            if flag:
+                correct_csv = "<p style='color: green; margin-bottom: 2px; margin-top: -10px'>This dataset looks to have the right columns</p>"
+
             # returns the CSS styling along with the preview HTML into the IFrame
-            return css + preview_html
+            return css_for_table() + f"<p style='color: white;'>The Number of Rows: {num_rows}</p>" + correct_csv + preview_html
 
     # Handles dataset swapping
     elif "dataset-swap" in request.form:
@@ -62,6 +74,22 @@ def admin_post():
         # Checks to make sure that the file is a CSV
         if file and file.content_type == 'text/csv':
             df = pd.read_csv(file)
+
+            # Checks if the columns are correct and sets the flag accordingly
+            flag = True
+            for col in correct_column_list:
+                if col not in df.columns.to_list():
+                    flag = False
+                    break
+
+            # If columns are incorrect, flash an error message and redirect
+            if not flag:
+                flash("The uploaded dataset does not have the correct columns.", "danger")
+                return redirect(url_for("admin.index"))
+
+            # TODO: Implement dataset swapping logic here
+            # Todo: write a function to do this since it will be a lot easier to manage later on
+
             flash("Dataset swapped successfully.", "success")
             return redirect(url_for("admin.index"))
 
@@ -106,24 +134,6 @@ def authorize():
     # Welcome the admin user
     flash(f"Welcome, {email}!", "success")
     return redirect(url_for("admin.index"))
-
-@admin_bp.route("/upload", methods=['GET', 'POST'])
-def upload():
-    # Checks in the message type is POST
-    if request.method == 'POST':
-        # Check if a file is part of the request
-        file = request.files.get('file')
-
-        # If file is not a CSV, flash an error message
-        if file.content_type == 'text/csv':
-            df = pd.read_csv(file)
-
-            return df.to_html()
-        else:
-            flash("Invalid file format. Please upload a CSV file.", "danger")
-            return redirect(url_for("admin.upload"))
-
-    return render_template("upload.html")
 
 @admin_bp.route("/logout")
 def logout():
