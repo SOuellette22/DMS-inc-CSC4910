@@ -16,7 +16,7 @@ class AIModels(db.Model):
     model_name = db.Column(db.String(255), primary_key=True, unique=True, nullable=False)
     file_path = db.Column(db.String(512), nullable=False)
     admin_email = db.Column(db.String(255), db.ForeignKey('admin_info.email'), nullable=False)
-    updated_by = db.Column(db.String(255), db.ForeignKey('admin_info.email'), nullable=False)
+    updated_by = db.Column(db.String(255), db.ForeignKey('admin_info.email'), nullable=True)
     date_created = db.Column(db.DateTime, default=datetime.now)
     date_updated = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     description = db.Column(db.Text, nullable=True)

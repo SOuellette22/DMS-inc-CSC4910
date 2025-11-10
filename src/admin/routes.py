@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from authlib.integrations.flask_client import OAuth
 from src.api_key import *
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 # Import models
 from src.models import Admin, AIModels
@@ -87,8 +88,29 @@ def admin_post():
                 flash("The uploaded dataset does not have the correct columns.", "danger")
                 return redirect(url_for("admin.index"))
 
-            # TODO: Implement dataset swapping logic here
-            # Todo: write a function to do this since it will be a lot easier to manage later on
+            # Process the dataset and create training and testing splits
+            processed_df = process_dataset(df)
+
+            # Gets the features and labels from the processed dataframe
+            dataset_label = processed_df['Cul_rating']
+            dataset_features = processed_df.drop(columns=['Cul_rating'], axis=1)
+
+            # Creates the training and testing splits
+            X_train, X_test, y_train, y_test = train_test_split(
+                dataset_features, dataset_label, test_size=0.2, random_state=42
+            )
+
+            flash("Splits created successfully.", "info")
+
+            # Update all AI models with the new dataset splits
+            ai_models = AIModels.query.all()
+            for model in ai_models:
+                # Gets the path to the model dataset file
+                path = model.file_path
+
+                flash("Updating model: " + model.model_name + "\nPath: " + path, "info")
+
+
 
             flash("Dataset swapped successfully.", "success")
             return redirect(url_for("admin.index"))
