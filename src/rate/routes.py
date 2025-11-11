@@ -29,6 +29,6 @@ def index():
         flash(f"Culvert Length: {culvert_length}", "info")
         flash(f"Culvert Age: {culvert_age}", "info")
 
-        return redirect(url_for("core.home")) # TODO: Change this to the results page when available
+        return render_template('export_rate.html') # TODO: Change this to the results page when available
 
     return render_template("rate.html")
