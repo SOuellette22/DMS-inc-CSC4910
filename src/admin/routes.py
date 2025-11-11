@@ -1,6 +1,8 @@
 # Imports needed for admin routes
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app
 from authlib.integrations.flask_client import OAuth
+from sklearn.metrics import accuracy_score
+
 from src.api_key import *
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -100,15 +102,17 @@ def admin_post():
                 dataset_features, dataset_label, test_size=0.2, random_state=42
             )
 
-            flash("Splits created successfully.", "info")
-
             # Update all AI models with the new dataset splits
             ai_models = AIModels.query.all()
             for model in ai_models:
                 # Gets the path to the model dataset file
                 path = model.file_path
 
-                flash("Updating model: " + model.model_name + "\nPath: " + path, "info")
+                model_trained, accuracy = train_model(model.model_name, path, X_train, X_test, y_train, y_test)
+
+                flash(f"Model {model.model_name} retrained with accuracy: {accuracy:.2f}", "info")
+
+
 
 
 

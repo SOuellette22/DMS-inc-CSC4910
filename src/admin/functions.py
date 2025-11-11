@@ -89,3 +89,35 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     new_df.dropna(subset=['Flooding_Frequency'], axis=0, inplace=True)
 
     return new_df
+
+def train_model(name, path, X_train, X_test, y_train, y_test):
+    '''
+    This function will train a model based on the name provided
+    :param name: This is the name of the model to be trained
+    :param X_train: This is the training features
+    :param X_test: This is the testing features
+    :param y_train: This is the training labels
+    :param y_test: This is the testing labels
+    :return: The trained model and its accuracy score on the test set
+    '''
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+    from xgboost import XGBClassifier
+
+    model = None
+
+    if name == "Random Forest":
+        model = RandomForestClassifier(n_estimators=100, random_state=42)
+    elif name == "XGBoost":
+        model = XGBClassifier(random_state=42)
+    elif name == "Logistic Regression":
+        model = LogisticRegression()
+    else:
+        raise ValueError(f"Model '{name}' is not supported.")
+
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
+    return model, accuracy
