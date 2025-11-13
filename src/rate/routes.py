@@ -16,6 +16,7 @@ def index():
         culvert_shape = request.form["culvert_shape"]
         culvert_length = request.form["culvert_length"]
         culvert_age = request.form["culvert_age"]
+        
 
         # TODO: David this is where you will process the data and output it to the user
         flash(f"Rating Submitted Properly", "success")
