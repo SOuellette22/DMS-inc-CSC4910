@@ -6,7 +6,7 @@
 
 {% block content %}
 <style>
-  /* Page-local only for tiny details spacing */
+  /* tiny details */
   .more {
     margin: -4px 0 8px;
   }
@@ -17,10 +17,44 @@
     display: block;
     margin-top: 6px;
   }
+
+  /* Two columns */
+  .field-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 960px) {
+    .field-columns {
+      grid-template-columns: 1fr; /* stack if window shrinks */
+    }
+  }
+
+  .field-box {
+    background: var(--card);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 14px;
+  }
+
+  .field-box legend {
+    margin-bottom: 6px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #dce1ea;
+  }
+
+  .field-box label span {
+    display: inline-block;
+    width: 100%;
+  }
 </style>
 
 <main class="content-narrow">
-  <!-- Photo on top (kept as-is) -->
+  <!-- Photo -->
   <section class="hero">
     <img
       src="/img/3d_sewer_storm_water_outlet_47_00001.jpg"
@@ -46,189 +80,197 @@
     id="rate-form"
   >
     <fieldset class="field-grid" id="export-target">
-      <!-- Soil / Environment -->
-      <legend>Soil &amp; Environment</legend>
 
-      <label>
-        <span>Soil pH (0–14)</span>
-        <input
-          type="number"
-          name="soil_ph"
-          step="0.1"
-          min="0"
-          max="14"
-          placeholder="e.g., 6.8"
-          required
-        />
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Enter a numeric pH between 0 and 14. Typical soils are ~4.5–8.5.
-          </div>
-        </details>
-      </label>
+      <div class="field-columns">
 
-      <label>
-        <span>Soil Drainage Class</span>
-        <select name="soil_drainage" required>
-          <option value="" disabled selected>Select one…</option>
-          <option>Very Poorly Drained</option>
-          <option>Poorly Drained</option>
-          <option>Somewhat Poorly Drained</option>
-          <option>Moderately Poorly Drained</option>
-          <option>Well Drained</option>
-          <option>High</option>
-          <option>Somewhat Excessively Drained</option>
-          <option>Excessively Drained</option>
-        </select>
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Use standard USDA/NRCS classes. These are internally mapped for
-            modeling.
-          </div>
-        </details>
-      </label>
+        <!-- Left column: Soil & Environment -->
+        <div class="field-box">
+          <legend>Soil &amp; Environment</legend>
 
-      <label>
-        <span>Soil Moisture (%)</span>
-        <input
-          type="number"
-          name="soil_moisture"
-          step="0.1"
-          min="0"
-          max="100"
-          placeholder="0–100"
-          required
-        />
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Percentage based on wet vs. dry soil mass; enter 0–100.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Soil pH (0–14)</span>
+            <input
+              type="number"
+              name="soil_ph"
+              step="0.1"
+              min="0"
+              max="14"
+              placeholder="e.g., 6.8"
+              required
+            />
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Enter a numeric pH between 0 and 14. Typical soils are ~4.5–8.5.
+              </div>
+            </details>
+          </label>
 
-      <label>
-        <span>Soil Electrical Conductivity (&gt; 0)</span>
-        <input
-          type="number"
-          name="soil_ec"
-          step="0.001"
-          min="0.001"
-          placeholder="e.g., 1.25"
-          required
-        />
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Provide a positive numeric value; site surveys or lab tests can
-            report EC.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Soil Drainage Class</span>
+            <select name="soil_drainage" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Very Poorly Drained</option>
+              <option>Poorly Drained</option>
+              <option>Somewhat Poorly Drained</option>
+              <option>Moderately Poorly Drained</option>
+              <option>Well Drained</option>
+              <option>High</option>
+              <option>Somewhat Excessively Drained</option>
+              <option>Excessively Drained</option>
+            </select>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Use standard USDA/NRCS classes. These are internally mapped for
+                modeling.
+              </div>
+            </details>
+          </label>
 
-      <label>
-        <span>Flood Frequency</span>
-        <select name="flood_frequency" required>
-          <option value="" disabled selected>Select one…</option>
-          <option>None</option>
-          <option>Very Rare</option>
-          <option>Rare</option>
-          <option>Occasional</option>
-          <option>Frequent</option>
-        </select>
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Choose the closest category from local hydrologic records/studies.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Soil Moisture (%)</span>
+            <input
+              type="number"
+              name="soil_moisture"
+              step="0.1"
+              min="0"
+              max="100"
+              placeholder="0–100"
+              required
+            />
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Percentage based on wet vs. dry soil mass; enter 0–100.
+              </div>
+            </details>
+          </label>
 
-      <!-- Culvert Attributes -->
-      <legend>Culvert Attributes</legend>
+          <label>
+            <span>Soil Electrical Conductivity (&gt; 0)</span>
+            <input
+              type="number"
+              name="soil_ec"
+              step="0.001"
+              min="0.001"
+              placeholder="e.g., 1.25"
+              required
+            />
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Provide a positive numeric value; site surveys or lab tests can
+                report EC.
+              </div>
+            </details>
+          </label>
 
-      <label>
-        <span>Culvert Material</span>
-        <select name="culvert_material" required>
-          <option value="" disabled selected>Select one…</option>
-          <option>Aluminum</option>
-          <option>Corrugated Steel</option>
-          <option>HDPE</option>
-          <option>PVC</option>
-          <option>Steel Plate</option>
-          <option>Reinforced Concrete</option>
-          <option>Unreinforced Concrete</option>
-        </select>
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Pick the installed material. Inputs are encoded for modeling
-            consistency.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Flood Frequency</span>
+            <select name="flood_frequency" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>None</option>
+              <option>Very Rare</option>
+              <option>Rare</option>
+              <option>Occasional</option>
+              <option>Frequent</option>
+            </select>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Choose the closest category from local hydrologic records/studies.
+              </div>
+            </details>
+          </label>
+        </div>
 
-      <label>
-        <span>Culvert Shape</span>
-        <select name="culvert_shape" required>
-          <option value="" disabled selected>Select one…</option>
-          <option>Box</option>
-          <option>Round</option>
-          <option>Arch</option>
-          <option>Drop Inlet</option>
-          <option>Ellipse</option>
-        </select>
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Select the cross-section shape. Model encodes shapes into features.
-          </div>
-        </details>
-      </label>
+        <!-- Right column: Culvert Attributes -->
+        <div class="field-box">
+          <legend>Culvert Attributes</legend>
 
-      <label>
-        <span>Culvert Length (ft)</span>
-        <input
-          type="number"
-          name="culvert_length"
-          step="0.001"
-          min="0.001"
-          placeholder="&gt; 0"
-          required
-        />
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Enter the linear distance from inlet to outlet along the culvert’s
-            axis (feet), not circumference.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Culvert Material</span>
+            <select name="culvert_material" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Aluminum</option>
+              <option>Corrugated Steel</option>
+              <option>HDPE</option>
+              <option>PVC</option>
+              <option>Steel Plate</option>
+              <option>Reinforced Concrete</option>
+              <option>Unreinforced Concrete</option>
+            </select>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Pick the installed material. Inputs are encoded for modeling
+                consistency.
+              </div>
+            </details>
+          </label>
 
-      <label>
-        <span>Culvert Age (years)</span>
-        <input
-          type="number"
-          name="culvert_age"
-          step="1"
-          min="0"
-          placeholder="≥ 0"
-          required
-        />
-        <details class="more" data-more>
-          <summary data-text="See more">See more</summary>
-          <div class="muted">
-            Years since installation (or best estimate from records).
-            Non-negative integer.
-          </div>
-        </details>
-      </label>
+          <label>
+            <span>Culvert Shape</span>
+            <select name="culvert_shape" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Box</option>
+              <option>Round</option>
+              <option>Arch</option>
+              <option>Drop Inlet</option>
+              <option>Ellipse</option>
+            </select>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Select the cross-section shape. Model encodes shapes into features.
+              </div>
+            </details>
+          </label>
 
-      <p class="helper">
-        Inputs and allowable ranges follow project requirements. Rating is 1
-        (poor) to 5 (excellent).
+          <label>
+            <span>Culvert Length (ft)</span>
+            <input
+              type="number"
+              name="culvert_length"
+              step="0.001"
+              min="0.001"
+              placeholder="&gt; 0"
+              required
+            />
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Enter the linear distance from inlet to outlet along the culvert’s
+                axis (feet), not circumference.
+              </div>
+            </details>
+          </label>
+
+          <label>
+            <span>Culvert Age (years)</span>
+            <input
+              type="number"
+              name="culvert_age"
+              step="1"
+              min="0"
+              placeholder="≥ 0"
+              required
+            />
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Years since installation (or best estimate from records).
+                Non-negative integer.
+              </div>
+            </details>
+          </label>
+        </div>
+
+      </div>
+
+      <p class="helper" style="text-align: center;">
+        Rating is 1 (poor) to 5 (excellent).
       </p>
 
       <div class="actions">
@@ -254,22 +296,18 @@
       >
         Export to PDF (Temporary)
       </button>
-      <small class="muted">
-        Final export will mirror on-screen results and inputs per spec.
-      </small>
     </div>
   </section>
 </main>
 {% endblock %}
 
 <script>
-  // Toggle "See more" <-> "See less" text on details
+  // "See more" + "See less" text on details
   document.querySelectorAll("[data-more]").forEach((d) => {
     const summary = d.querySelector("summary");
     const openText = "See more";
     const closeText = "See less";
 
-    // Initialize summary label
     summary.textContent = openText;
 
     d.addEventListener("toggle", () => {
