@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 def css_for_table():
     '''
@@ -47,6 +48,15 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     new_df = new_df[new_df.Cul_rating != "Unknown"]
     new_df["Cul_rating"] = new_df["Cul_rating"].astype(int)
 
+    rates = new_df['Cul_rating'].unique()
+    rates.sort()
+    for rate in rates:
+        df = new_df['Age'][new_df.Cul_rating == rate]
+        q1 = df.quantile(q=0.25, interpolation='linear')
+        q3 = df.quantile(q=0.75, interpolation='linear')
+        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] < q1)].index)
+        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] > q3)].index)
+
     # This converts the cul_type column into one hot encoded columns
     new_df = new_df[new_df.cul_type != "UNKNOWN"]
     new_df_temp = pd.get_dummies(new_df["cul_type"], prefix='type')
@@ -90,7 +100,7 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
     return new_df
 
-def train_model(name, path, X_train, X_test, y_train, y_test):
+def train_model(name, path, X_train, y_train):
     '''
     This function will train a model based on the name provided
     :param name: This is the name of the model to be trained
@@ -101,23 +111,43 @@ def train_model(name, path, X_train, X_test, y_train, y_test):
     :return: The trained model and its accuracy score on the test set
     '''
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.metrics import accuracy_score
     from xgboost import XGBClassifier
-
-    model = None
+    import pickle
 
     if name == "Random Forest":
         model = RandomForestClassifier(n_estimators=100, random_state=42)
+        model.fit(X_train, y_train)
+
+        file = "." + path # Prepend a dot to make it a relative path
+
+        # Check if the specified path exists
+        if os.path.exists(file):
+
+            # Save the trained model to the specified path
+            with open(file, 'wb') as f:
+                pickle.dump(model, f)
+
+            return True
+
+        return False
+
+
     elif name == "XGBoost":
         model = XGBClassifier(random_state=42)
-    elif name == "Logistic Regression":
-        model = LogisticRegression()
+        model.fit(X_train, y_train)
+
+        file = "." + path # Prepend a dot to make it a relative path
+
+        # Check if the specified path exists
+        if os.path.exists(file):
+
+            # Save the trained model to the specified path
+            with open(file, 'wb') as f:
+                pickle.dump(model, f)
+
+            return True
+
+        return False
     else:
-        raise ValueError(f"Model '{name}' is not supported.")
+        return "Model type not supported."
 
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-
-    return model, accuracy
