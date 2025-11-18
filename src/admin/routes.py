@@ -90,6 +90,9 @@ def upload():
 @admin_bp.route("/logout")
 def logout():
     # Log out the user by clearing the session
+    if "username" not in session:
+        return redirect(url_for("core.home"))
+
     username = session["username"]
     flash(f"You have been logged out, {username}", "info")
     session.pop("username", None)
