@@ -52,6 +52,7 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     new_df = new_df[new_df.Cul_rating != "Unknown"]
     new_df["Cul_rating"] = new_df["Cul_rating"].astype(int)
 
+    # This removes outliers from the Age column based on the Cul_rating`
     rates = new_df['Cul_rating'].unique()
     rates.sort()
     for rate in rates:
@@ -120,6 +121,7 @@ def train_model(name, path, X_train, Xtest, y_train, y_test):
 
     dir = "./instance/tmp"
 
+    # Create the temp directory if it does not exist
     if not os.path.exists(dir):
         os.mkdir(dir)
     else:
@@ -128,6 +130,7 @@ def train_model(name, path, X_train, Xtest, y_train, y_test):
         if os.path.exists(full_path):
             os.remove(full_path)
 
+    # Train the model based on the name provided
     if name == "Random Forest":
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
@@ -137,9 +140,11 @@ def train_model(name, path, X_train, Xtest, y_train, y_test):
     else:
         return "Model type not supported."
 
+    # Save the trained model to the specified path
     with open(dir + path, 'wb') as f:
         pickle.dump(model, f)
 
+    # Return the accuracy score of the model on the test set
     return f"{accuracy_score(y_test, model.predict(Xtest)):.3f}"
 
 def save_models():

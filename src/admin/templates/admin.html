@@ -326,7 +326,11 @@
       datasetSwapBtn.addEventListener("click", () =>
         datasetDialog.showModal()
       );
+
+      // This closes dataset dialog without action
       datasetCancel.addEventListener("click", () => datasetDialog.close());
+
+      // This handles dataset confirmation and accuracy checking
       datasetConfirm.addEventListener("click", () => {
         datasetDialog.close();
 
@@ -349,12 +353,14 @@
         .catch( error => console.error('Error:', error) );
       });
 
+      // This confirms accuracy and submits the form
       accuracyConfirm.addEventListener("click", () => {
         accuracyDialog.close();
         datasetUploadForm.target = "";
 
       });
 
+      // This closes accuracy dialog without action
       accuracyCancel.addEventListener("click", () => accuracyDialog.close());
 
       // This handles that preview of the dataset in the iframe
@@ -362,29 +368,5 @@
       datasetPreviewBtn.addEventListener("click", () => {
         datasetUploadForm.target = "datasetPreviewFrame";
       });
-
-      // Model confirm flow
-      const modelActivateBtn = document.getElementById("model-activate-btn");
-      const modelDialog = document.getElementById("confirmModelDialog");
-      const modelCancel = document.getElementById("modelCancel");
-      const modelConfirm = document.getElementById("modelConfirm");
-      const modelActivateForm = document.getElementById("modelActivateForm");
-
-      if (modelActivateBtn && modelDialog) {
-        modelActivateBtn.addEventListener("click", () =>
-          modelDialog.showModal()
-        );
-        modelCancel.addEventListener("click", () => modelDialog.close());
-        modelConfirm.addEventListener("click", () => {
-          modelDialog.close();
-          if (
-            modelActivateForm &&
-            modelActivateForm.action &&
-            !modelActivateForm.action.endsWith("#")
-          ) {
-            modelActivateForm.submit();
-          }
-        });
-      }
     </script>
 {% endblock %}

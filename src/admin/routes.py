@@ -11,12 +11,12 @@ from sklearn.model_selection import train_test_split
 from src.models import Admin, AIModels
 from src.admin.functions import *
 
-
+# Define the correct columns for the dataset
 correct_column_list = ['latitude', 'longitude', 'length',
-                           'cul_matl', 'cul_type', 'Soil_Drainage_Class',
-                           'Soil_Moisture', 'Soil_pH', 'Soil_Elec_Conductivity',
-                           'Soil_Surface_Texture','Flooding_Frequency',
-                           'State', 'Age', 'Cul_rating']
+                       'cul_matl', 'cul_type', 'Soil_Drainage_Class',
+                       'Soil_Moisture', 'Soil_pH', 'Soil_Elec_Conductivity',
+                       'Soil_Surface_Texture','Flooding_Frequency',
+                       'State', 'Age', 'Cul_rating']
 
 # Define the admin blueprint and OAuth
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
@@ -77,10 +77,12 @@ def admin_post():
 
         string = save_models() # Saves the current models before swapping datasets
 
+        # Checks if the models were saved successfully
         if string != "Models saved":
             flash("Error saving models before dataset swap.", "danger")
             return redirect(url_for("admin.index"))
 
+        # The dataset swap process was completed successfully
         flash("Dataset swapped successfully.", "success")
         return redirect(url_for("admin.index"))
 
