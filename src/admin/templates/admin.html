@@ -339,6 +339,7 @@
 
             if (data === "Error: Incorrect columns in dataset.") {
                 window.location.reload();
+                datasetUploadForm.reset()
             } else {
                 confirmAccuracyP.innerText = data;
 
