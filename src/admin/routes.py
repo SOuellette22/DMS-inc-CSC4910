@@ -1,5 +1,5 @@
 # Imports needed for admin routes
-from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app, jsonify
 from authlib.integrations.flask_client import OAuth
 from sklearn.metrics import accuracy_score
 
@@ -10,6 +10,13 @@ from sklearn.model_selection import train_test_split
 # Import models
 from src.models import Admin, AIModels
 from src.admin.functions import *
+
+
+correct_column_list = ['latitude', 'longitude', 'length',
+                           'cul_matl', 'cul_type', 'Soil_Drainage_Class',
+                           'Soil_Moisture', 'Soil_pH', 'Soil_Elec_Conductivity',
+                           'Soil_Surface_Texture','Flooding_Frequency',
+                           'State', 'Age', 'Cul_rating']
 
 # Define the admin blueprint and OAuth
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
@@ -38,11 +45,6 @@ def index():
 # Admin POST route to handle form submissions
 @admin_bp.route("/", methods=['POST'])
 def admin_post():
-    correct_column_list = ['latitude', 'longitude', 'length',
-                           'cul_matl', 'cul_type', 'Soil_Drainage_Class',
-                           'Soil_Moisture', 'Soil_pH', 'Soil_Elec_Conductivity',
-                           'Soil_Surface_Texture','Flooding_Frequency',
-                           'State', 'Age', 'Cul_rating']
 
     # Handles the preview of the dataset
     if "dataset-preview" in request.form:
@@ -72,56 +74,67 @@ def admin_post():
 
     # Handles dataset swapping
     elif "dataset-swap" in request.form:
-        file = request.files.get('file')
 
-        # Checks to make sure that the file is a CSV
-        if file and file.content_type == 'text/csv':
-            df = pd.read_csv(file)
+        string = save_models() # Saves the current models before swapping datasets
 
-            # Checks if the columns are correct and sets the flag accordingly
-            flag = True
-            for col in correct_column_list:
-                if col not in df.columns.to_list():
-                    flag = False
-                    break
-
-            # If columns are incorrect, flash an error message and redirect
-            if not flag:
-                flash("The uploaded dataset does not have the correct columns.", "danger")
-                return redirect(url_for("admin.index"))
-
-            # Process the dataset and create training and testing splits
-            processed_df = process_dataset(df)
-
-            # Gets the features and labels from the processed dataframe
-            dataset_label = processed_df['Cul_rating']
-            dataset_features = processed_df.drop(columns=['Cul_rating'], axis=1)
-
-            # Creates the training and testing splits
-            X_train, X_test, y_train, y_test = train_test_split(
-                dataset_features, dataset_label, test_size=0.2, random_state=42
-            )
-
-            # Update all AI models with the new dataset splits
-            ai_models = AIModels.query.all()
-            for model in ai_models:
-                # Gets the path to the model dataset file
-                path = model.file_path
-
-                model_trained, accuracy = train_model(model.model_name, path, X_train, X_test, y_train, y_test)
-
-                flash(f"Model {model.model_name} retrained with accuracy: {accuracy:.2f}", "info")
-
-
-
-
-
-            flash("Dataset swapped successfully.", "success")
+        if string != "Models saved":
+            flash("Error saving models before dataset swap.", "danger")
             return redirect(url_for("admin.index"))
+
+        flash("Dataset swapped successfully.", "success")
+        return redirect(url_for("admin.index"))
 
     flash("No valid action specified.", "danger")
 
     return redirect(url_for("admin.index"))
+
+@admin_bp.route("/test_training", methods=['POST'])
+def test_training():
+    # This route is for testing purposes to evaluate model accuracy
+    file = request.files.get('file')
+
+    string = "Accuracy Results:\n"
+
+    # Checks to make sure that the file is a CSV
+    if file and file.content_type == 'text/csv':
+        df = pd.read_csv(file)
+
+        # Checks if the columns are correct and sets the flag accordingly
+        flag = True
+        for col in correct_column_list:
+            if col not in df.columns.to_list():
+                flag = False
+                break
+
+        # If columns are incorrect, flash an error message and redirect
+        if not flag:
+            flash("The uploaded dataset does not have the correct columns.", "danger")
+            return jsonify("Error: Incorrect columns in dataset.")
+
+        # Process the dataset and create training and testing splits
+        processed_df = process_dataset(df)
+
+        # Gets the features and labels from the processed dataframe
+        dataset_label = processed_df['Cul_rating']
+        dataset_features = processed_df.drop(columns=['Cul_rating'], axis=1)
+
+        # Creates the training and testing splits
+        X_train, X_test, y_train, y_test = train_test_split(
+            dataset_features, dataset_label, test_size=0.2, random_state=42
+        )
+
+        # Update all AI models with the new dataset splits
+        ai_models = AIModels.query.all()
+        for model in ai_models:
+            # Gets the path to the model dataset file
+            path = model.file_path
+
+            flag = train_model(model.model_name, path, X_train, X_test, y_train, y_test)  # Train the model and saves them
+
+            string += f"{model.model_name}: {flag}\n"
+
+    return jsonify(string)
+
 
 @admin_bp.route("/login")
 def login():

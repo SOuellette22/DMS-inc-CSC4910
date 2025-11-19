@@ -1,5 +1,9 @@
 import pandas as pd
 import os
+from datetime import datetime
+
+from sklearn.metrics import accuracy_score
+
 
 def css_for_table():
     '''
@@ -100,7 +104,7 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
     return new_df
 
-def train_model(name, path, X_train, y_train):
+def train_model(name, path, X_train, Xtest, y_train, y_test):
     '''
     This function will train a model based on the name provided
     :param name: This is the name of the model to be trained
@@ -114,40 +118,76 @@ def train_model(name, path, X_train, y_train):
     from xgboost import XGBClassifier
     import pickle
 
+    dir = "./instance/tmp"
+
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    else:
+        # remove existing file if it exists
+        full_path = os.path.join(dir, path)
+        if os.path.exists(full_path):
+            os.remove(full_path)
+
     if name == "Random Forest":
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
-
-        file = "." + path # Prepend a dot to make it a relative path
-
-        # Check if the specified path exists
-        if os.path.exists(file):
-
-            # Save the trained model to the specified path
-            with open(file, 'wb') as f:
-                pickle.dump(model, f)
-
-            return True
-
-        return False
-
-
     elif name == "XGBoost":
         model = XGBClassifier(random_state=42)
         model.fit(X_train, y_train)
-
-        file = "." + path # Prepend a dot to make it a relative path
-
-        # Check if the specified path exists
-        if os.path.exists(file):
-
-            # Save the trained model to the specified path
-            with open(file, 'wb') as f:
-                pickle.dump(model, f)
-
-            return True
-
-        return False
     else:
         return "Model type not supported."
+
+    with open(dir + path, 'wb') as f:
+        pickle.dump(model, f)
+
+    return f"{accuracy_score(y_test, model.predict(Xtest)):.3f}"
+
+def save_models():
+    '''
+    This function will save the trained models to the instance/current directory
+    '''
+
+    temp_dir = "./instance/tmp"
+    current_dir = "./instance/current"
+
+    # If the current directory does not exist, create it
+    if not os.path.exists(current_dir):
+        os.mkdir(current_dir)
+
+    # If the temp directory does not exist, there are no models to save
+    if not os.path.exists(temp_dir):
+        return "No models to save."
+
+    # Checks if the current directory exists and moves all files to a new directory called the current time stamp
+    if os.listdir(current_dir):
+        time_stamp = datetime.now().strftime("%Y-%m-%d_%H.%M.%S") # Format: YYYY-MM-DD_HH.MM.SS
+        new_dir = os.path.join("./instance", time_stamp) # New directory path
+        os.mkdir(new_dir) # Create the new directory
+
+        # Moves all files from the current directory to the new time stamp directory
+        for file_name in os.listdir(current_dir):
+            full_file_name = os.path.join(current_dir, file_name)
+            if os.path.isfile(full_file_name):
+                os.replace(full_file_name, os.path.join(new_dir, file_name))
+
+    # Moves all files from the temp directory to the current directory
+    for file_name in os.listdir(temp_dir):
+        full_file_name = os.path.join(temp_dir, file_name)
+        if os.path.isfile(full_file_name):
+            os.replace(full_file_name, os.path.join(current_dir, file_name))
+
+    os.rmdir(temp_dir)
+
+    # This removes the third-oldest time stamp directory if there are more than 2
+    time_stamp_dirs = [d for d in os.listdir("./instance") if os.path.isdir(os.path.join("./instance", d))]  # List of time stamp directories
+    if len(time_stamp_dirs) > 3:
+        time_stamp_dirs.sort()
+        dir_to_remove = os.path.join("./instance", time_stamp_dirs[0])  # Get the oldest directory
+        for file_name in os.listdir(dir_to_remove):
+            full_file_name = os.path.join(dir_to_remove, file_name)
+            if os.path.isfile(full_file_name):
+                os.remove(full_file_name)
+        os.rmdir(dir_to_remove)
+
+    return "Models saved"
 
