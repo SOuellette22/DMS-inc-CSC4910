@@ -361,7 +361,11 @@
       });
 
       // This closes accuracy dialog without action
-      accuracyCancel.addEventListener("click", () => accuracyDialog.close());
+      accuracyCancel.addEventListener("click", () => {
+          accuracyDialog.close();
+          window.location.reload();
+          datasetUploadForm.reset();
+      });
 
       // This handles that preview of the dataset in the iframe
       const datasetPreviewBtn = document.getElementById("dataset-preview-btn");
