@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>404 - Page Not Found</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    body, html {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+    }
+
+    .error-code {
+      font-size: clamp(80px, 12vw, 160px);
+      font-weight: 800;
+      text-shadow: var(--shadow);
+    }
+
+    .error-text {
+      font-size: clamp(18px, 3vw, 32px);
+      color: var(--muted);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="error-code">404</div>
+    <div class="error-text">Page Not Found</div>
+  </div>
+</body>
+</html>
