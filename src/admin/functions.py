@@ -119,16 +119,14 @@ def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
     from xgboost import XGBClassifier
     import pickle
 
-    dir = db_path + "/tmp/"
-
-    print(dir)
+    db_dir = db_path + "/tmp/"
 
     # Create the temp directory if it does not exist
-    if not os.path.exists(dir):
-        os.mkdir(dir)
+    if not os.path.exists(db_dir):
+        os.mkdir(db_dir)
     else:
         # remove existing file if it exists
-        full_path = os.path.join(dir, path)
+        full_path = os.path.join(db_dir, path)
         if os.path.exists(full_path):
             os.remove(full_path)
 
@@ -143,7 +141,7 @@ def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
         return "Model type not supported."
 
     # Save the trained model to the specified path
-    with open(dir + path, 'wb') as f:
+    with open(db_dir + path, 'wb') as f:
         pickle.dump(model, f)
 
     # Return the accuracy score of the model on the test set
