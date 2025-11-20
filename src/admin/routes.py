@@ -75,7 +75,9 @@ def admin_post():
     # Handles dataset swapping
     elif "dataset-swap" in request.form:
 
-        string = save_models() # Saves the current models before swapping datasets
+        db_path = current_app.instance_path
+
+        string = save_models(db_path) # Saves the current models before swapping datasets
 
         # Checks if the models were saved successfully
         if string != "Models saved":
@@ -125,13 +127,15 @@ def test_training():
             dataset_features, dataset_label, test_size=0.2, random_state=42
         )
 
+        db_path = current_app.instance_path
+
         # Update all AI models with the new dataset splits
         ai_models = AIModels.query.all()
         for model in ai_models:
             # Gets the path to the model dataset file
             path = model.file_path
 
-            flag = train_model(model.model_name, path, X_train, X_test, y_train, y_test)  # Train the model and saves them
+            flag = train_model(model.model_name, path, db_path, X_train, X_test, y_train, y_test)  # Train the model and saves them
 
             string += f"{model.model_name}: {flag}\n"
 

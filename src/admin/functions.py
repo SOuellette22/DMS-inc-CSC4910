@@ -105,7 +105,7 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
     return new_df
 
-def train_model(name, path, X_train, Xtest, y_train, y_test):
+def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
     '''
     This function will train a model based on the name provided
     :param name: This is the name of the model to be trained
@@ -119,7 +119,9 @@ def train_model(name, path, X_train, Xtest, y_train, y_test):
     from xgboost import XGBClassifier
     import pickle
 
-    dir = "./instance/tmp"
+    dir = db_path + "/tmp/"
+
+    print(dir)
 
     # Create the temp directory if it does not exist
     if not os.path.exists(dir):
@@ -147,13 +149,13 @@ def train_model(name, path, X_train, Xtest, y_train, y_test):
     # Return the accuracy score of the model on the test set
     return f"{accuracy_score(y_test, model.predict(Xtest)):.3f}"
 
-def save_models():
+def save_models(db_path):
     '''
     This function will save the trained models to the instance/current directory
     '''
 
-    temp_dir = "./instance/tmp"
-    current_dir = "./instance/current"
+    temp_dir = db_path + "/tmp/"
+    current_dir = db_path + "/current/"
 
     # If the current directory does not exist, create it
     if not os.path.exists(current_dir):
