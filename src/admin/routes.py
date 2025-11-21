@@ -34,12 +34,24 @@ google = oauth.register(
 @admin_bp.route("/")
 def index():
     # Check if user is logged in
-    if "username" not in session:
+    if "username" in session:
+
+        username = session["username"]
+
+        if not Admin.query.filter_by(email=username).first():
+            # If not an admin, log out and redirect to home
+            flash("Access denied: You are not an admin.", "danger")
+            session.pop("username", None)
+
+            current_app.logger.error("Non-admin user had session active, logging out.")
+
+            return redirect(url_for("core.home"))
+
         # If not logged in, redirect to login page
-        return redirect(url_for("admin.login"))
+        return render_template("admin.html")
     else:
         # If logged in, render the admin dashboard
-        return render_template("admin.html")
+        return redirect(url_for("admin.login"))
 
 # Admin POST route to handle form submissions
 @admin_bp.route("/", methods=['POST'])

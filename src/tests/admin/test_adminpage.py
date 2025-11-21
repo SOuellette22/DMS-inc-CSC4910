@@ -1,9 +1,11 @@
 import pytest
+from src.models import Admin
 
 def test_get_adminpage_logged_in(client):
     """Test that the admin page loads correctly."""
+    username  = Admin.query.all()[0]
     with client.session_transaction() as sess:
-        sess["username"] = True # Simulate that there exists a logged in user
+        sess["username"] = username.email # Simulate that there exists a logged in user
     response = client.get("/admin/")
     assert response.status_code == 200
     assert b"This is the admin page" in response.data
@@ -30,8 +32,9 @@ def test_login_already_logged_in(client):
 
 def test_log_out(client):
     """Test that the logout route clears the session and redirects to home."""
+    username = Admin.query.all()[0]
     with client.session_transaction() as sess:
-        sess["username"] = True # Simulate that there exists a logged in user
+        sess["username"] = username.email # Simulate that there exists a logged in user
 
     # Checks to make sure the user is logged in
     response = client.get("/admin/")
@@ -87,7 +90,7 @@ def test_admin_access_with_various_session_username_values(client, username_valu
     """
     with client.session_transaction() as sess:
         sess["username"] = username_value
-    resp = client.get("/admin/", follow_redirects=False)
+    resp = client.get("/admin/", follow_redirects=True)
     assert resp.status_code != 500
     # should not allow admin page render as normal 200 for unknown/invalid username
     assert resp.status_code in (302, 401, 403, 404) or resp.status_code == 200
