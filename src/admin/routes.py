@@ -98,11 +98,9 @@ def admin_post():
 
     elif "modelConfirm" in request.form:
 
-        temp = request.form.get("model_name")
-
         # Gets the model details from the form
         model_name = request.form.get("model_name")
-        file_path = "/" + temp.strip() + ".pkl"
+        file_path = "/" + model_name.strip() + ".pkl"
         admin_email = session["username"]
         description = request.form.get("description")
 
