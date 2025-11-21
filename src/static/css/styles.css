@@ -123,7 +123,6 @@ main {
   margin-bottom: 0.35rem;
 }
 .hero-overlay p {
-  color: #4b5563;
   color: var(--muted);
   font-size: 1rem;
 }
