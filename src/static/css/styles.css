@@ -188,17 +188,17 @@ main {
 }
 
 /* ---- Rate Page ---- */
-.rate-grid {
+.rate-grid-top {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 18px;
   margin-top: 10px;
 }
 
-@media (max-width: 960px) {
-  .rate-grid {
-    grid-template-columns: 1fr;
-  }
+.rate-grid-bottom {
+    display: grid;
+    gap: 18px;
+    margin-top: 10px;
 }
 
 .form-card {
@@ -225,7 +225,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   padding: 12px 12px;
   border-radius: 12px;

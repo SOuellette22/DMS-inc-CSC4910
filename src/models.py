@@ -7,6 +7,10 @@ class Admin(db.Model):
     email = db.Column(db.String(255), primary_key=True, unique=True, nullable=False)
     date_joined = db.Column(db.DateTime, nullable=True, default=datetime.now)
 
+    def __init__(self, email):
+        self.email = email
+        self.date_joined = datetime.now()
+
     def __repr__(self):
         return f"<Admin {self.email}>"
 
@@ -20,6 +24,14 @@ class AIModels(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.now)
     date_updated = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     description = db.Column(db.Text, nullable=True)
+
+    def __init__(self, model_name, file_path, admin_email, description=None):
+        self.model_name = model_name
+        self.file_path = file_path
+        self.admin_email = admin_email
+        self.description = description
+        self.date_created = datetime.now()
+        self.date_updated = datetime.now()
 
     def __repr__(self):
         return f"<AIModel {self.model_name} by {self.admin_email}>"

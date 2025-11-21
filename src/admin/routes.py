@@ -1,13 +1,12 @@
 # Imports needed for admin routes
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, current_app, jsonify
 from authlib.integrations.flask_client import OAuth
-from sklearn.metrics import accuracy_score
 
 from src.api_key import *
-import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Import models
+from src.app import db
 from src.models import Admin, AIModels
 from src.admin.functions import *
 
@@ -84,8 +83,32 @@ def admin_post():
             flash("Error saving models before dataset swap.", "danger")
             return redirect(url_for("admin.index"))
 
+        # Updates the date_updated and updated_by fields for all AI models
+        for model in AIModels.query.all():
+            model.date_updated = datetime.now()
+            model.updated_by = session["username"]
+
+            db.session.commit()
+
         # The dataset swap process was completed successfully
         flash("Dataset swapped successfully.", "success")
+        return redirect(url_for("admin.index"))
+
+    elif "modelConfirm" in request.form:
+
+        temp = request.form.get("model_name")
+
+        # Gets the model details from the form
+        model_name = request.form.get("model_name")
+        file_path = "/" + temp.strip() + ".pkl"
+        admin_email = session["username"]
+        description = request.form.get("description")
+
+        # Creates a new AI model entry in the database
+        new_model = AIModels(model_name, file_path, admin_email, description)
+        db.session.add(new_model)
+        db.session.commit()
+
         return redirect(url_for("admin.index"))
 
     flash("No valid action specified.", "danger")
@@ -97,7 +120,7 @@ def test_training():
     # This route is for testing purposes to evaluate model accuracy
     file = request.files.get('file')
 
-    string = "Accuracy Results:\n"
+    string = "Accuracy Results:\n" # Initialize the string to hold accuracy results
 
     # Checks to make sure that the file is a CSV
     if file and file.content_type == 'text/csv':
@@ -137,9 +160,9 @@ def test_training():
 
             flag = train_model(model.model_name, path, db_path, X_train, X_test, y_train, y_test)  # Train the model and saves them
 
-            string += f"{model.model_name}: {flag}\n"
+            string += f"{model.model_name}: {flag}\n" # Append the accuracy result to the string
 
-    return jsonify(string)
+    return jsonify(string) # Return the accuracy results as JSON
 
 
 @admin_bp.route("/login")
