@@ -10,6 +10,8 @@ from src.app import db
 from src.models import Admin, AIModels
 from src.admin.functions import *
 
+from datetime import datetime
+
 # Define the correct columns for the dataset
 correct_column_list = ['latitude', 'longitude', 'length',
                        'cul_matl', 'cul_type', 'Soil_Drainage_Class',
