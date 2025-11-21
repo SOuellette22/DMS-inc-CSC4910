@@ -69,7 +69,7 @@ def admin_post():
                 correct_csv = "<p style='color: green; margin-bottom: 2px; margin-top: -10px'>This dataset looks to have the right columns</p>"
 
             # returns the CSS styling along with the preview HTML into the IFrame
-            return css_for_table() + f"<p style='color: white;'>The Number of Rows: {num_rows}</p>" + correct_csv + preview_html
+            return css_for_table() + f"<p style='color: black;'>The Number of Rows: {num_rows}</p>" + correct_csv + preview_html
 
     # Handles dataset swapping
     elif "dataset-swap" in request.form:
