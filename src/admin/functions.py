@@ -17,17 +17,17 @@ def css_for_table():
             padding: 10px;
         }
         th {
-            background-color: #0b0b0f; 
+            background-color: #0; 
             shadow: 0 10px 30px rgba(0, 0, 0, 0.35); 
-            color: white; 
+            color: black; 
             font-family: Tahoma;
             font-size : 13; 
             text-align: center;
         }
         td {
-            background-color: #0b0b0f; 
+            background-color: #0; 
             shadow:0 10px 30px rgba(0, 0, 0, 0.35); 
-            color: white; 
+            color: black; 
             padding: 10px; 
             font-family: Calibri; 
             font-size : 12; 

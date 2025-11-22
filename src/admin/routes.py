@@ -43,7 +43,7 @@ def index():
             flash("Access denied: You are not an admin.", "danger")
             session.pop("username", None)
 
-            current_app.logger.error("Non-admin user had session active, logging out.")
+            current_app.logger.error("Non-admin user had session active, logging out. Email: %s", username)
 
             return redirect(url_for("core.home"))
 
@@ -81,7 +81,7 @@ def admin_post():
                 correct_csv = "<p style='color: green; margin-bottom: 2px; margin-top: -10px'>This dataset looks to have the right columns</p>"
 
             # returns the CSS styling along with the preview HTML into the IFrame
-            return css_for_table() + f"<p style='color: white;'>The Number of Rows: {num_rows}</p>" + correct_csv + preview_html
+            return css_for_table() + f"<p style='color: black;'>The Number of Rows: {num_rows}</p>" + correct_csv + preview_html
 
     # Handles dataset swapping
     elif "dataset-swap" in request.form:
@@ -224,5 +224,4 @@ def logout():
     username = session["username"]
     flash(f"You have been logged out, {username}", "info")
     session.pop("username", None)
-    session.pop("password", None)
     return redirect(url_for("core.home"))
