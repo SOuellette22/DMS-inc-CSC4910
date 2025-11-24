@@ -110,6 +110,17 @@ def admin_post():
 
         temp = request.form.get("model_name")
 
+        # This makes it so that the file path is formatted correctly
+        path = "/"
+        tempSlit = temp.split(" ")
+        for i in range(len(tempSlit)):
+            if i == 0:
+                path += tempSlit[i].lower()
+            else:
+                path += tempSlit[i]
+                if i != len(tempSlit) - 1:
+                    path += ""
+
         # Gets the model details from the form
         model_name = request.form.get("model_name")
         file_path = "/" + temp.strip() + ".pkl"
