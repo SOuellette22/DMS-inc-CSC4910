@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>404 - Page Not Found</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <style>
-    body, html {
-      height: 100%;
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block content %}
+<style>
+    .error-container {
+      height: 78vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -27,12 +26,9 @@
       color: var(--muted);
       margin-top: 10px;
     }
-  </style>
-</head>
-<body>
-  <div>
+</style>
+<div class="error-container">
     <div class="error-code">404</div>
     <div class="error-text">Page Not Found</div>
-  </div>
-</body>
-</html>
+</div>
+{% endblock %}
