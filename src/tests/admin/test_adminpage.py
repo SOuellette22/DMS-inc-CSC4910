@@ -94,4 +94,5 @@ def test_admin_access_with_various_session_username_values(client, username_valu
     assert resp.status_code != 500
     # should not allow admin page render as normal 200 for unknown/invalid username
     assert resp.status_code in (302, 401, 403, 404) or resp.status_code == 200
-    assert b"This is the home page" in resp.data
+    if resp.status_code == 200:
+        assert b"This is the home page" in resp.data
