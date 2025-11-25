@@ -13,7 +13,7 @@ def css_for_table():
     css = """
     <style type="text/css" media="screen" style="width:100%">
         table, th, td {
-            background-color: #0; 
+            background-color: #FFFFFF;
             padding: 10px;
         }
         th {
@@ -107,13 +107,15 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
 def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
     '''
-    This function will train a model based on the name provided
-    :param name: This is the name of the model to be trained
-    :param X_train: This is the training features
-    :param X_test: This is the testing features
-    :param y_train: This is the training labels
-    :param y_test: This is the testing labels
-    :return: The trained model and its accuracy score on the test set
+    This function will train a model based on the name provided.
+    :param name: This is the name of the model to be trained.
+    :param path: The filename (relative or absolute) where the trained model will be saved.
+    :param db_path: The base directory path where the model and temporary files will be stored.
+    :param X_train: This is the training features.
+    :param X_test: This is the testing features.
+    :param y_train: This is the training labels.
+    :param y_test: This is the testing labels.
+    :return: The trained model's accuracy score on the test set.
     '''
     from sklearn.ensemble import RandomForestClassifier
     from xgboost import XGBClassifier
