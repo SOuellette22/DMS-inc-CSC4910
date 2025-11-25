@@ -67,3 +67,4 @@ Then click the link that you are given in the terminal.
  - [Team Charter](https://docs.google.com/document/d/149NgPigSCGIX7yueF8f0Pnu0fES1BcW7ZFphQcvbJkk/edit?usp=sharing)
  - [Requirements Document](https://docs.google.com/document/d/1EEfwas8moUHnBnlsdQN27V9cU-uG57uX3xUNHZQ0Z0c/edit?usp=sharing)
  - [Function Spec Document](https://docs.google.com/document/d/1mNoZxIZMnMPij4--SMbyazGPRnZfoIoB1KvsgGCOcZU/edit?usp=sharing)
+ - [Poster](https://www.canva.com/design/DAG5don9qN0/u5UHJOR2NZxa7aOnn9y5RQ/view?utm_content=DAG5don9qN0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfb71b60f78)
