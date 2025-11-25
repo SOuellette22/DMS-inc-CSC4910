@@ -147,7 +147,7 @@ def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
         pickle.dump(model, f)
 
     # Return the accuracy score of the model on the test set
-    return f"{accuracy_score(y_test, model.predict(Xtest)):.3f}"
+    return round(accuracy_score(y_test, model.predict(Xtest)),3)
 
 def save_models(db_path):
     '''
@@ -168,7 +168,7 @@ def save_models(db_path):
     # Checks if the current directory exists and moves all files to a new directory called the current time stamp
     if os.listdir(current_dir):
         time_stamp = datetime.now().strftime("%Y-%m-%d_%H.%M.%S") # Format: YYYY-MM-DD_HH.MM.SS
-        new_dir = os.path.join("./instance", time_stamp) # New directory path
+        new_dir = os.path.join(db_path, time_stamp) # New directory path
         os.mkdir(new_dir) # Create the new directory
 
         # Moves all files from the current directory to the new time stamp directory
@@ -186,10 +186,10 @@ def save_models(db_path):
     os.rmdir(temp_dir)
 
     # This removes the third-oldest time stamp directory if there are more than 2
-    time_stamp_dirs = [d for d in os.listdir("./instance") if os.path.isdir(os.path.join("./instance", d))]  # List of time stamp directories
+    time_stamp_dirs = [d for d in os.listdir(db_path) if os.path.isdir(os.path.join(db_path, d))]  # List of time stamp directories
     if len(time_stamp_dirs) > 3:
         time_stamp_dirs.sort()
-        dir_to_remove = os.path.join("./instance", time_stamp_dirs[0])  # Get the oldest directory
+        dir_to_remove = os.path.join(db_path, time_stamp_dirs[0])  # Get the oldest directory
         for file_name in os.listdir(dir_to_remove):
             full_file_name = os.path.join(dir_to_remove, file_name)
             if os.path.isfile(full_file_name):
