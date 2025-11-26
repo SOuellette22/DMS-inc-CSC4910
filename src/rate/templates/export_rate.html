@@ -4,19 +4,53 @@
 
 {% block content %}
 
-<!-- Main container for the export summary -->
-<main class="content-narrow">
+<!-- =============================================== -->
+<!-- PRINT CSS: Makes window.print() look like a PDF -->
+<!-- =============================================== -->
+<style>
+  @media print {
+    /* Hide EVERYTHING on the page */
+    body * {
+      visibility: hidden;
+    }
 
-  <!-- Card: Rating summary -->
+    /* Only show the print area content */
+    #print-area,
+    #print-area * {
+      visibility: visible;
+    }
+
+    /* Position the print area at the top for PDF output */
+    #print-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+
+    /* Remove shadows/borders so PDF looks clean */
+    .card.export-card {
+      box-shadow: none !important;
+      border: none !important;
+    }
+  }
+</style>
+
+<!-- Everything inside #print-area will appear in the PDF -->
+<main class="content-narrow" id="print-area">
+
+  <!-- ============================= -->
+  <!-- Card: Main Rating Summary -->
+  <!-- ============================= -->
   <section class="card export-card">
 
-    <!-- Page intro text -->
+    <!-- Small muted header -->
     <p class="muted">Culvert rating summary</p>
 
-    <!-- Large header -->
+    <!-- Page title -->
     <h1>Your rating</h1>
 
-    <!-- Main rating badge -->
+    <!-- Key badge showing rating number -->
     <p style="margin: 0.5rem 0;">
       <span style="
           display:inline-block;
@@ -30,29 +64,74 @@
       </span>
     </p>
 
-    <!-- Text explanation of the condition (comes from describe_condition()) -->
+    <!-- Main condition description -->
     <p class="lead">
       {{ condition_label or "S minus is in very good condition." }}
     </p>
 
-    <!-- Section for RandomForest + XGBoost model outputs -->
+    <!-- ============================= -->
+    <!-- Model Outputs (RF + XGBoost) -->
+    <!-- ============================= -->
     <div style="margin-top: 1rem;">
+
       <h2 style="margin-bottom: 0.5rem;">Model outputs</h2>
 
-      <!-- Simple model list -->
+      <!-- List with both model predictions -->
       <ul style="list-style: none; padding: 0; margin: 0;">
         <li><strong>Random forest</strong> {{ random_rating or 5 }}</li>
         <li><strong>XGBoost</strong> {{ xgb_rating or 5 }}</li>
       </ul>
 
-      <!-- Helpful hint below model results -->
+      <!-- Context clue -->
       <p class="muted" style="margin-top: 0.5rem; font-size: 0.9rem;">
         Ratings range from 1 (poor) to 5 (excellent).
       </p>
     </div>
+  </section>
 
-    <!-- Buttons: Export + Rate another -->
-    <div class="actions" style="margin-top: 1.5rem;">
+  <!-- ============================================ -->
+  <!-- Optional: Table that shows all input values -->
+  <!-- ============================================ -->
+  {% if input_rows %}
+  <section class="card export-card">
+    <h2>Input data</h2>
+
+    <table class="export-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+      <tbody>
+
+        <!-- Loop through each label/value pair -->
+        {% for label, value in input_rows %}
+        <tr>
+          <!-- Left column: label -->
+          <th scope="row"
+              style="text-align: left; padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ label }}
+          </th>
+
+          <!-- Right column: value -->
+          <td style="padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ value }}
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </section>
+  {% endif %}
+
+</main>
+
+<!-- =========================================================== -->
+<!-- Buttons appear on screen but WILL NOT appear in the PDF -->
+<!-- =========================================================== -->
+<section class="content-narrow">
+  <div class="card export-card">
+    <div class="actions" style="margin-top: 0.5rem;">
+
+      <!-- Export Button → uses window.print() -->
       <button
         class="btn btn-primary"
         type="button"
@@ -62,41 +141,13 @@
         Export to PDF
       </button>
 
-      <!-- Back button -->
+      <!-- Go back to form -->
       <a href="{{ url_for('rate.index') }}" class="btn">
         Rate another culvert
       </a>
+
     </div>
-
-  </section>
-
-  <!-- If input_rows exists, display a table of all user inputs -->
-  {% if input_rows %}
-  <section class="card export-card">
-    <h2>Input data</h2>
-
-    <!-- Table with labels + values -->
-    <table class="export-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
-      <tbody>
-        {% for label, value in input_rows %}
-        <tr>
-          <th scope="row"
-              style="text-align: left; padding: 0.4rem 0.6rem;
-                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
-            {{ label }}
-          </th>
-
-          <td style="padding: 0.4rem 0.6rem;
-                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
-            {{ value }}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </section>
-  {% endif %}
-
-</main>
+  </div>
+</section>
 
 {% endblock %}
