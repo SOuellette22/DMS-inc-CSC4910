@@ -3,12 +3,20 @@
 {% block title %}Export Rate Data — DMS Inc.{% endblock %}
 
 {% block content %}
+
+<!-- Main container for the export summary -->
 <main class="content-narrow">
+
+  <!-- Card: Rating summary -->
   <section class="card export-card">
+
+    <!-- Page intro text -->
     <p class="muted">Culvert rating summary</p>
 
+    <!-- Large header -->
     <h1>Your rating</h1>
 
+    <!-- Main rating badge -->
     <p style="margin: 0.5rem 0;">
       <span style="
           display:inline-block;
@@ -22,21 +30,28 @@
       </span>
     </p>
 
+    <!-- Text explanation of the condition (comes from describe_condition()) -->
     <p class="lead">
       {{ condition_label or "S minus is in very good condition." }}
     </p>
 
+    <!-- Section for RandomForest + XGBoost model outputs -->
     <div style="margin-top: 1rem;">
       <h2 style="margin-bottom: 0.5rem;">Model outputs</h2>
+
+      <!-- Simple model list -->
       <ul style="list-style: none; padding: 0; margin: 0;">
         <li><strong>Random forest</strong> {{ random_rating or 5 }}</li>
         <li><strong>XGBoost</strong> {{ xgb_rating or 5 }}</li>
       </ul>
+
+      <!-- Helpful hint below model results -->
       <p class="muted" style="margin-top: 0.5rem; font-size: 0.9rem;">
         Ratings range from 1 (poor) to 5 (excellent).
       </p>
     </div>
 
+    <!-- Buttons: Export + Rate another -->
     <div class="actions" style="margin-top: 1.5rem;">
       <button
         class="btn btn-primary"
@@ -46,23 +61,33 @@
       >
         Export to PDF
       </button>
+
+      <!-- Back button -->
       <a href="{{ url_for('rate.index') }}" class="btn">
         Rate another culvert
       </a>
     </div>
+
   </section>
 
+  <!-- If input_rows exists, display a table of all user inputs -->
   {% if input_rows %}
   <section class="card export-card">
     <h2>Input data</h2>
+
+    <!-- Table with labels + values -->
     <table class="export-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
       <tbody>
         {% for label, value in input_rows %}
         <tr>
-          <th scope="row" style="text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+          <th scope="row"
+              style="text-align: left; padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
             {{ label }}
           </th>
-          <td style="padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+
+          <td style="padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
             {{ value }}
           </td>
         </tr>
@@ -71,5 +96,7 @@
     </table>
   </section>
   {% endif %}
+
 </main>
+
 {% endblock %}

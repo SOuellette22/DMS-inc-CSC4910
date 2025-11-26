@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
+# Blueprint for the rating page
+# This maps to the "/rate" URL prefix when registered in app.py
 rate_bp = Blueprint("rate", __name__, template_folder="templates")
 
 
+# Helper function that converts a numeric rating into a human-readable label
 def describe_condition(score: int) -> str:
     if score >= 5:
         return "S minus is in very good condition."
@@ -16,10 +19,15 @@ def describe_condition(score: int) -> str:
         return "The culvert is in critical condition and should be evaluated urgently."
 
 
+# Main route for rating a culvert
+# GET  → show the form
+# POST → process the form and show the export summary page
 @rate_bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        # Safely get form data
+        # -------------------------------
+        # 1. Collect all form inputs safely
+        # -------------------------------
         soil_ph = request.form.get("soil_ph")
         soil_drainage = request.form.get("soil_drainage")
         soil_moisture = request.form.get("soil_moisture")
@@ -30,17 +38,22 @@ def index():
         culvert_length = request.form.get("culvert_length")
         culvert_age = request.form.get("culvert_age")
 
-        # You can keep these flashes for debugging if you want
+        # Flash message (optional — useful during debugging)
         flash("Rating submitted properly", "success")
 
-        # PLACEHOLDER MODEL OUTPUTS
-        # TODO plug your real model here
+        # -------------------------------
+        # 2. Placeholder model outputs — replace with ML prediction later
+        # -------------------------------
         random_rating = 5
         xgb_rating = 5
         overall_rating = 5
+
+        # Convert the final score into a readable condition description
         condition_label = describe_condition(int(overall_rating))
 
-        # Rows for the input table on export_rate.html
+        # -------------------------------
+        # 3. Build a row list for the input table on export_rate.html
+        # -------------------------------
         input_rows = [
             ("Soil pH", soil_ph),
             ("Soil drainage class", soil_drainage),
@@ -53,6 +66,9 @@ def index():
             ("Culvert age (years)", culvert_age),
         ]
 
+        # -------------------------------
+        # 4. Render the results page with all computed values
+        # -------------------------------
         return render_template(
             "export_rate.html",
             overall_rating=overall_rating,
@@ -62,5 +78,7 @@ def index():
             input_rows=input_rows,
         )
 
-    # GET just show the form
+    # -------------------------------
+    # GET request — simply show the rating form
+    # -------------------------------
     return render_template("rate.html")
