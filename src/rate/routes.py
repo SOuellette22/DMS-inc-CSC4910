@@ -3,6 +3,19 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 rate_bp = Blueprint("rate", __name__, template_folder="templates")
 
 
+def describe_condition(score: int) -> str:
+    if score >= 5:
+        return "S minus is in very good condition."
+    elif score == 4:
+        return "The culvert is in good condition with minor concerns."
+    elif score == 3:
+        return "The culvert is in fair condition and should be monitored."
+    elif score == 2:
+        return "The culvert is in poor condition and maintenance is recommended."
+    else:
+        return "The culvert is in critical condition and should be evaluated urgently."
+
+
 @rate_bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -20,13 +33,12 @@ def index():
         # You can keep these flashes for debugging if you want
         flash("Rating submitted properly", "success")
 
-        # ==== PLACEHOLDER MODEL OUTPUTS ====
-        # TODO: plug your real model here
+        # PLACEHOLDER MODEL OUTPUTS
+        # TODO plug your real model here
         random_rating = 5
         xgb_rating = 5
         overall_rating = 5
-        condition_label = "S minus is in very good condition."
-        # ===================================
+        condition_label = describe_condition(int(overall_rating))
 
         # Rows for the input table on export_rate.html
         input_rows = [
@@ -50,5 +62,5 @@ def index():
             input_rows=input_rows,
         )
 
-    # GET: just show the form
+    # GET just show the form
     return render_template("rate.html")
