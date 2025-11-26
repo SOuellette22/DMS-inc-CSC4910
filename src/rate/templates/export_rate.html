@@ -3,105 +3,28 @@
 {% block title %}Export Rate Data — DMS Inc.{% endblock %}
 
 {% block content %}
-<style>
-  .export-summary {
-    display: grid;
-    gap: 1.5rem;
-  }
-  .rating-main {
-    padding: 1rem 1.25rem;
-    border-radius: 8px;
-    background: var(--card-soft-bg, #f4f5f7);
-  }
-  .rating-main h1 {
-    margin: 0 0 0.25rem;
-    font-size: 1.5rem;
-  }
-  .rating-value {
-    font-size: 2.75rem;
-    font-weight: 600;
-    margin: 0.25rem 0;
-  }
-  .model-breakdown {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.75rem 1.5rem;
-    margin: 0;
-  }
-  .model-breakdown dt {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted-fg, #6b7280);
-  }
-  .model-breakdown dd {
-    margin: 0.1rem 0 0;
-    font-size: 1.15rem;
-    font-weight: 500;
-  }
-  .export-meta {
-    font-size: 0.9rem;
-    color: var(--muted-fg, #6b7280);
-  }
-  .export-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0.75rem;
-    font-size: 0.95rem;
-  }
-  .export-table th,
-  .export-table td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.4);
-    text-align: left;
-  }
-  .export-table th {
-    width: 40%;
-    font-weight: 500;
-    background: rgba(148, 163, 184, 0.08);
-  }
-</style>
-
 <main class="content-narrow">
   <section class="card export-card">
-    <p class="muted" style="margin-bottom: 0.25rem;">
-      Culvert rating summary
+    <p class="muted">Culvert rating summary</p>
+
+    <h1>Your rating</h1>
+    <p class="rating-value" style="font-size: 2.5rem; font-weight: 600; margin: 0.25rem 0;">
+      {{ overall_rating or 5 }}
     </p>
 
-    <div class="export-summary">
-      <!-- Overall rating -->
-      <div class="rating-main">
-        <h1>Your rating</h1>
-        <p class="rating-value">
-          {{ overall_rating or 5 }}
-        </p>
-        <p class="lead" style="margin-bottom: 0.25rem;">
-          {{ condition_label or "S minus is in very good condition." }}
-        </p>
-        <p class="export-meta">
-          Ratings range from 1 (poor) to 5 (excellent) based on project
-          requirements.
-        </p>
-      </div>
+    <p class="lead">
+      {{ condition_label or "S minus is in very good condition." }}
+    </p>
 
-      <!-- Model outputs -->
-      <section>
-        <h2 style="margin-top: 0;">Model outputs</h2>
-        <p class="export-meta" style="margin-bottom: 0.5rem;">
-          Individual model scores used to generate the final rating.
-        </p>
-
-        <dl class="model-breakdown">
-          <div>
-            <dt>Random forest</dt>
-            <dd>{{ random_rating or 5 }}</dd>
-          </div>
-          <div>
-            <dt>XGBoost</dt>
-            <dd>{{ xgb_rating or 5 }}</dd>
-          </div>
-        </dl>
-      </section>
+    <div style="margin-top: 1rem;">
+      <h2 style="margin-bottom: 0.5rem;">Model outputs</h2>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><strong>Random forest</strong> {{ random_rating or 5 }}</li>
+        <li><strong>XGBoost</strong> {{ xgb_rating or 5 }}</li>
+      </ul>
+      <p class="muted" style="margin-top: 0.5rem; font-size: 0.9rem;">
+        Ratings range from 1 (poor) to 5 (excellent).
+      </p>
     </div>
 
     <div class="actions" style="margin-top: 1.5rem;">
@@ -119,19 +42,19 @@
     </div>
   </section>
 
-  {# Optional table of the inputs that produced this rating #}
   {% if input_rows %}
   <section class="card export-card">
     <h2>Input data</h2>
-    <p class="export-meta">
-      Field inputs captured for this culvert.
-    </p>
-    <table class="export-table">
+    <table class="export-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
       <tbody>
         {% for label, value in input_rows %}
         <tr>
-          <th scope="row">{{ label }}</th>
-          <td>{{ value }}</td>
+          <th scope="row" style="text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ label }}
+          </th>
+          <td style="padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ value }}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
