@@ -10,7 +10,56 @@
 <style>
 /* Adds space between info boxes only on this page */
 main.content-narrow .card {
-  margin-bottom: 40px; /* was ~20px, now gives more breathing room */
+  margin-bottom: 40px; /* more breathing room between cards */
+}
+
+/* State conversion toggle + list */
+.state-conversion-header {
+  margin-top: 16px;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.btn-toggle {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--outline);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-toggle:hover {
+  border-color: var(--accent);
+}
+
+.state-conversion-list {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--outline);
+}
+
+.state-conversion-list.hidden {
+  display: none;
+}
+
+.state-conversion-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.state-conversion-list li {
+  padding: 6px 0;
+  font-size: 0.95rem;
+}
+
+.state-conversion-list strong {
+  display: inline-block;
+  min-width: 140px;
 }
 </style>
 
@@ -18,49 +67,236 @@ main.content-narrow .card {
   <h1>Project Information</h1>
   <p class="lead">Where to find inputs and who built this tool.</p>
 
+  <!-- Credits moved to the top -->
+  <section class="card">
+    <h2>Credits</h2>
+
+    <h3>Research team</h3>
+    <ul class="simple-list">
+      <li>Pouria Mohammad — University of Utah</li>
+      <li>Sadegh Asgari — Merrimack College</li>
+      <li>Abbas Rashidi — University of Utah</li>
+      <li>Sara Asgari — University of Pennsylvania</li>
+      <li>Farzane Asgari — Columbia University</li>
+    </ul>
+
+    <h3>Website development</h3>
+    <ul class="simple-list">
+      <li>Sean Ouellette — Lead Backend Developer</li>
+      <li>Maxwell Sprogis — UI Lead &amp; Project Manager</li>
+      <li>David Hamilton — Documentation Lead &amp; Frontend</li>
+    </ul>
+  </section>
+
   <section class="card">
     <h2>Where to Find Input Data</h2>
-    <ul class="simple-list">
-      <li>
-        <strong>Soil pH</strong> — Use state/USDA soil maps or local geotech
-        reports; valid range 0–14.
-      </li>
-      <li>
-        <strong>Electrical Conductivity</strong> — Soil survey data or site
-        sampling; value &gt; 0.
-      </li>
-      <li>
-        <strong>Drainage Class</strong> — USDA/NRCS classifications (e.g.,
-        Well Drained, Poorly Drained).
-      </li>
-      <li>
-        <strong>Flood Frequency</strong> — Local flood studies or hydrologic
-        records (None → Frequent).
-      </li>
-    </ul>
-    <p class="muted">
-      Acceptable ranges and enumerations mirror the project requirements and
-      UI constraints.
+
+    <p>
+      All soil-related inputs (soil pH, soil moisture, drainage class, and electrical conductivity)
+      can be obtained from the USDA Web Soil Survey:
+      <a href="https://websoilsurvey.nrcs.usda.gov/app/" target="_blank" rel="noopener">
+        https://websoilsurvey.nrcs.usda.gov/app/
+      </a>.
     </p>
+
+    <p>
+      Once you have the latitude and longitude for the culvert location, you can enter them directly here:
+      <a href="https://websoilsurvey.nrcs.usda.gov/app/WebSoilSurvey.aspx" target="_blank" rel="noopener">
+        https://websoilsurvey.nrcs.usda.gov/app/WebSoilSurvey.aspx
+      </a>.
+    </p>
+
+    <p>Basic Web Soil Survey workflow for this project:</p>
+    <ol class="simple-list">
+      <li>
+        Open Web Soil Survey and click <strong>Start WSS</strong>.
+      </li>
+      <li>
+        Use the <strong>Quick Navigation</strong> panel (e.g., Latitude/Longitude, Address, or
+        State/County) to zoom to the culvert’s location.
+      </li>
+      <li>
+        On the <strong>Area of Interest (AOI)</strong> tab, draw a rectangle or polygon around the culvert
+        to define a small AOI that includes the structure and immediate surroundings.
+      </li>
+      <li>
+        Switch to the <strong>Soil Data Explorer</strong> tab and open
+        <em>Soil Properties and Qualities</em>. From there, run reports for:
+        soil pH, electrical conductivity, soil drainage class, and other properties needed by the Rate form.
+      </li>
+      <li>
+        View the tables or export them (Printable Version / Shopping Cart) and copy the relevant values into
+        this tool’s input fields.
+      </li>
+    </ol>
   </section>
 
   <section class="card">
     <h2>How Results Are Presented</h2>
+
     <p>
-      The platform provides a 1–5 condition rating with a probability
-      distribution and short factor explanations to support decision-making
-      and documentation. (Export to PDF is planned.)
+      When you submit the Rate form, the platform sends your inputs
+      (culvert material, shape, age, soil pH, soil electrical conductivity, soil moisture,
+      drainage class, flood frequency, and state) to a trained probabilistic model that was
+      built from a curated culvert dataset. The system returns:
     </p>
+
+    <ul class="simple-list">
+      <li>
+        Predicted condition rating (1–5) — a single “best estimate” of the culvert’s
+        condition on a Utah-style 1–5 scale, where lower values indicate poorer condition and higher values
+        indicate better condition.
+      </li>
+      <li>
+        Full probability distribution — the likelihood of each rating (1, 2, 3, 4, 5) is
+        displayed numerically and with a simple chart, so users can see whether the result is clear-cut or
+        uncertain.
+      </li>
+      <li>
+        Factor explanations — short, plain-language explanations summarize which inputs
+        pushed the rating up or down (for example, older age and frequent flooding may increase risk, while
+        reinforced concrete and favorable soil conditions may improve the rating).
+      </li>
+      <li>
+        Downloadable report (PDF) — a printable summary that captures the inputs, predicted
+        rating, probability distribution, and factor explanations for recordkeeping and communication with
+        colleagues or stakeholders.
+      </li>
+    </ul>
   </section>
 
-  <section class="card">
-    <h2>Credits</h2>
-    <ul class="simple-list">
-      <li>Maxwell Sprogis — UI Lead &amp; Project Manager</li>
-      <li>David Hamilton — Documentation Lead &amp; Frontend</li>
-      <li>Sean Ouellette — Lead Backend Developer</li>
-    </ul>
-    <p class="muted">Per the Team Charter & Deliverables.</p>
+  <section class="card" id="state-conversions">
+    <h2>State conversion ratings</h2>
+
+    <p>
+      Different agencies use different culvert condition-rating systems (for example, 0–9 bridge-style scales,
+      1–4 “good/fair/poor/critical” scales, or other custom codes). To keep things consistent, this tool
+      converts all of them to a single Utah 1–5 condition rating scale before modeling.
+    </p>
+
+    <p>
+      The Utah 1–5 scale is used as the common reference. All participating states in the dataset are mapped
+      into this shared 1–5 system so that “poor” in one state lines up with “poor” in another.
+    </p>
+
+    <div class="state-conversion-header">
+      Click to see every state conversion:
+    </div>
+
+    <button
+      type="button"
+      id="state-toggle"
+      class="btn-toggle"
+    >
+      See all state conversions
+    </button>
+
+    <div id="state-conversion-list" class="state-conversion-list hidden">
+      <ul class="simple-list">
+        <p>
+          Most states use the standard 0–9 National Bridge Inventory (NBI) rating system
+          or do not assign a separate culvert-specific condition score. Only states that
+          apply alternative classification methods, adapt the 0–9 scale for culverts, or
+          use nonstandard condition definitions are listed below. These cases require
+          translation to the unified 1–5 rating used in this tool.
+        </p>
+
+        <li>
+          <strong>Utah</strong> —
+          Uses a native 1–5 culvert condition scale. This becomes the baseline; no conversion is required.
+        </li>
+        <li>
+          <strong>Colorado</strong> —
+          Commonly uses a 0–9 bridge-style condition scale. 
+        </li>
+        <li>
+          <strong>Ohio</strong> —
+          Uses numeric condition codes for culverts. These codes are translated into the 1–5 Utah-style
+          rating using a lookup table defined by the research team.
+        </li>
+        <li>
+          <strong>Vermont</strong> —
+          Uses multi-category scores (for structure, material, shape, etc.). Those categories are collapsed
+          into a single 1–5 rating based on official condition thresholds.
+        </li>
+        <li>
+          <strong>New Hampshire</strong> —
+          Often relies on 0–9 bridge-style ratings or stream-crossing scores.
+        </li>
+        <li>
+          <strong>Maryland</strong> —
+          Uses a 0–9 National Bridge Inventory–style condition rating for many culvert-like structures.
+        </li>
+        <li>
+          <strong>Pennsylvania</strong> —
+          Uses 0–9 condition codes in their bridge/culvert inspection manuals. 
+        </li>
+        <li>
+          <strong>New York</strong> —
+          Uses a 1–7 style condition scale for some assets. Those seven levels are compressed into the 1–5
+          rating while preserving the meaning of “poor”, “fair”, and “good” ranges.
+        </li>
+        <li>
+          <strong>Massachusetts</strong> —
+          Bridge-size culverts are typically rated on a 0–9 scale, while smaller culverts may be classified
+          as Good/Fair/Poor. Both systems are converted to the 1–5 scale for use in this tool.
+        </li>
+        <li>
+          <strong>Maine</strong> —
+          Uses categories like Good / Fair / Poor / Severe. These four levels are mapped into the 1–5
+          scale, with “Severe” aligning to the lowest rating.
+        </li>
+        <li>
+          <strong>Washington</strong> —
+          Frequently classifies culverts as Functional / Partially Functional / Failed in fish passage
+          programs. These non-numeric labels are converted into the 1–5 scale.
+        </li>
+        <li>
+          <strong>California</strong> —
+          Some culvert datasets use maintenance priority codes (Priority 1, 2, 3) instead of a direct condition
+          score.
+        </li>
+        <li>
+          <strong>Oregon</strong> —
+          Uses a three-level system for many small culverts (Acceptable / Monitor / Needs Repair), and 0–9
+          for bridge-size structures. Both are translated to the unified 1–5 scale.
+        </li>
+        <li>
+          <strong>Texas</strong> —
+          Commonly uses a 0–9 NBI-style rating for culverts.
+        </li>
+        <li>
+          <strong>Florida</strong> —
+          Uses 0–9 bridge-style condition ratings for culvert-like structures. 
+        </li>
+        <li>
+          <strong>North Carolina</strong> —
+          Often classifies culverts as Good / Fair / Poor. These categories are mapped to the 1–5 scale
+          while preserving their relative severity.
+        </li>
+      </ul>
+
+      <p class="muted" style="margin-top: 12px;">
+        As additional states or rating systems are added to the dataset, they will be translated into this
+        same 1–5 scale so that model outputs remain consistent and comparable.
+      </p>
+    </div>
   </section>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('state-toggle');
+    const list = document.getElementById('state-conversion-list');
+
+    if (!btn || !list) return;
+
+    btn.addEventListener('click', function () {
+      const isHidden = list.classList.toggle('hidden');
+      btn.textContent = isHidden
+        ? 'See all state conversions'
+        : 'Hide state conversions';
+    });
+  });
+</script>
 {% endblock %}

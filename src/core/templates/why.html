@@ -8,51 +8,124 @@
 
 {% block content %}
 <style>
-    /* Adds more vertical separation between cards */
-    main.content-narrow .card {
-      margin-bottom: 40px;
-    }
-  </style>
+  /* Adds more vertical separation between cards on this page */
+  main.content-narrow .card {
+    margin-bottom: 40px;
+  }
+</style>
+
 <main class="content-narrow">
   <h1>Why This Project</h1>
   <p class="lead">
-    Purpose, public safety impact, and cost-effective inspection planning.
+    Helping agencies prevent dangerous culvert failures with clear, data-driven ratings.
   </p>
 
+  <!-- WHY CULVERTS MATTER -->
   <section class="card">
-    <h2>Purpose</h2>
+    <h2>Why Culverts Matter for Road Safety</h2>
     <p>
-      Agencies manage large inventories of culverts with limited budgets. A
-      consistent, explainable, and fast screening tool helps triage
-      structures and standardize communications.
+      Culverts are essential for moving water under roads and protecting the pavement above.
+      When a culvert deteriorates or collapses, the effects can be sudden and severe:
+      lane closures, washouts, and unsafe conditions for drivers and maintenance crews.
+      Even a single failure can disrupt traffic, damage infrastructure, and require costly,
+      emergency repairs.
+    </p>
+    <p>
+      This project is motivated by the need to reduce those disasters. Instead of waiting
+      for visible distress or a collapse, agencies need a practical way to spot culverts
+      that are more likely to be in poor condition and prioritize them for inspection or
+      intervention.
     </p>
   </section>
 
+  <!-- PURPOSE -->
+  <section class="card">
+    <h2>Purpose of the Platform</h2>
+    <p>
+      The Probabilistic Culvert Condition Rating Platform is designed to give transportation
+      agencies, municipal engineers, and researchers a fast, consistent way to estimate a
+      culvert’s condition on a simple 1–5 scale using a small set of inputs such as
+      material, shape, age, soil pH, etc.
+    </p>
+    <p>
+      With given input, our system returns:
+    </p>
+    <ul class="simple-list">
+      <li>A predicted 1–5 rating for the culvert’s overall condition.</li>
+      <li>A probability distribution showing how likely each rating is.</li>
+      <li>Short explanations of which inputs pushed the score up or down.</li>
+    </ul>
+    <p>
+      The goal is to give engineers a smarter starting for discussing risk, maintenance, and replacement priorities.
+    </p>
+  </section>
+
+  <!-- PUBLIC SAFETY IMPACT -->
   <section class="card">
     <h2>Impact on Public Safety</h2>
     <p>
-      By highlighting higher-risk candidates sooner, the platform supports
-      proactive maintenance and reduces the chance of failures affecting
-      roads and communities. The 1–5 rating and probability view make risk
-      easier to communicate.
+      When a culvert collapses, it can undermine the road above it, force unexpected closures,
+      and put drivers, pedestrians, and first responders in danger. By highlighting higher-risk
+      candidates sooner, this platform helps agencies move from reactive repairs after a
+      failure to proactive maintenance before the road is compromised.
+    </p>
+    <p>
+      The combination of:
+    </p>
+    <ul class="simple-list">
+      <li>A standardized 1–5 rating scale,</li>
+      <li>Probabilities for each potential rating</li>
+      <li>Plain-language factor explanations</li>
+    </ul>
+    <p>
+      makes it easier to explain decisions to supervisors, district managers, and the public.
     </p>
   </section>
 
+  <!-- COST-EFFECTIVE PLANNING -->
   <section class="card">
-    <h2>Cost-Effective Inspection Planning</h2>
+    <h2>Cost-Effective Inspection and Maintenance Planning</h2>
     <p>
-      Using lightweight, browser-based inputs, planners can prioritize
-      inspections and allocate crews where the expected benefit is
-      highest—without heavy workflows or new logins.
+      Agencies often manage thousands of culverts with limited crews and budgets. Fixed-cycle
+      inspections treat every structure the same, even though some are far more likely to be in
+      poor condition than others. This tool supports risk-aware scheduling by pointing
+      engineers toward the culverts most likely to need attention first.
+    </p>
+    <p>
+      Because the platform is lightweight and browser-based, planners can:
+    </p>
+    <ul class="simple-list">
+      <li>Run quick ratings in the field or at the office using data they already have.</li>
+      <li>Compare “what-if” scenarios when considering materials or replacement options.</li>
+      <li>Export PDFs to support budget requests, planning memos, or design reports.</li>
+    </ul>
+    <p>
     </p>
   </section>
 
+  <!-- WHO BENEFITS -->
   <section class="card">
-    <h2>Design Notes</h2>
+    <h2>Who This Helps</h2>
     <p>
-      The UI emphasizes clarity and speed with clean pages, consistent
-      layout, and simple guidance. Export to PDF supports recordkeeping and
-      sharing of results.
+      The platform is built for:
+    </p>
+    <ul class="simple-list">
+      <li>
+        Field engineers who need quick, defensible ratings during site visits,
+        along with PDFs they can attach to inspection notes.
+      </li>
+      <li>
+        District planners who need to screen many culverts and prioritize
+        follow-up inspections, repairs, or replacements.
+      </li>
+      <li>
+        Consultants and researchers who want transparent, repeatable ratings
+        to support memos, studies, and design recommendations.
+      </li>
+    </ul>
+    <p>
+      Across all of these roles, the goal is the same: fewer surprises, fewer dangerous
+      failures, and safer roads for the public.
     </p>
   </section>
 </main>
