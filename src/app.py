@@ -15,9 +15,9 @@ def create_app():
     db.init_app(app)
 
     # import and register all blueprints
-    from rate.routes import rate_bp
-    from admin.routes import admin_bp
-    from core.routes import core_bp
+    from src.rate.routes import rate_bp
+    from src.admin.routes import admin_bp
+    from src.core.routes import core_bp
 
     app.register_blueprint(rate_bp, url_prefix="/rate", config = app.config)
     app.register_blueprint(admin_bp, url_prefix="/admin", config = app.config)
