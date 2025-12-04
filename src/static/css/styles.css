@@ -246,7 +246,7 @@ select:focus {
   border: 1px solid var(--outline);
   padding: 12px 16px;
   border-radius: 12px;
-  cursor: not-allowed;
+  cursor: pointer;
   color: var(--text);
 }
 
