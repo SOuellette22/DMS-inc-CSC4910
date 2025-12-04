@@ -1,0 +1,252 @@
+{% extends "base.html" %} 
+{# this is extending our shared base layout so all global UI stays consistent #}
+
+{% block title %}Export Rate Data — DMS Inc.{% endblock %}
+{# this is setting the page title that will show up in the browser tab #}
+
+{% block content %}
+{# this is the start of the main content area where our whole PDF report sits #}
+
+<!-- =================================================================== -->
+<!-- this is our global styling section for print mode and the gauge UI -->
+<!-- =================================================================== -->
+<style>
+
+  /* this is the print mode styling that activates exactly when window.print is called */
+  @media print {
+
+    /* this is hiding literally every element on the page for a clean export */
+    body * {
+      visibility: hidden;
+    }
+
+    /* this is re-revealing only the print area so the PDF looks official and clean */
+    #print-area,
+    #print-area * {
+      visibility: visible;
+    }
+
+    /* this is snapping the printable area to the top left for proper PDF layout */
+    #print-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    /* this is removing shadows and borders so the PDF looks like a professional report */
+    .card.export-card {
+      box-shadow: none !important;
+      border: none !important;
+    }
+  }
+
+
+  /* =============================== */
+  /* this is the entire condition gauge system */
+  /* =============================== */
+
+  .condition-gauge {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .gauge-bar {
+    width: 100%;
+    height: 14px;
+    border-radius: 999px;
+    /* this is the gradient that visually maps 1 to 5 from poor to excellent */
+    background: linear-gradient(
+      to right,
+      #dc2626,
+      #f97316,
+      #facc15,
+      #4ade80,
+      #22c55e
+    );
+    position: relative;
+  }
+
+  .gauge-indicator {
+    /* this is the floating indicator that moves automatically based on rating */
+    position: absolute;
+    top: -6px;
+    width: 12px;
+    height: 26px;
+    background: #0f172a;
+    border: 2px solid white;
+    border-radius: 3px;
+    transform: translateX(-50%);
+  }
+
+  .gauge-labels {
+    /* this is the numeric 1–5 labels that sit under the gauge bar */
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+
+</style>
+
+
+<!-- ================================================================ -->
+<!-- this is the start of the specific content that gets exported -->
+<!-- ================================================================ -->
+<main class="content-narrow" id="print-area">
+
+  <!-- ======================================================= -->
+  <!-- this is the main summary card showing the final rating -->
+  <!-- ======================================================= -->
+  <section class="card export-card">
+
+    <p class="muted">Culvert rating summary</p>
+    {# this is the intro line that gives context to the page #}
+
+    <h1>Your rating</h1>
+    {# this is the clear focal heading for the final rating #}
+
+    <!-- this is the badge that displays the numeric rating itself -->
+    <p style="margin: 0.5rem 0;">
+      <span style="
+          display:inline-block;
+          padding:0.2rem 0.9rem;
+          border-radius:999px;
+          border:1px solid rgba(148,163,184,0.6);
+          font-size:1.2rem;
+          font-weight:600;
+        ">
+        {{ overall_rating or 5 }}
+        {# this is showing the overall rating with a fallback of five just in case #}
+      </span>
+    </p>
+
+    <!-- this is the natural language explanation for the rating -->
+    <p class="lead">
+      {{ condition_label or "S minus is in very good condition." }}
+    </p>
+
+
+    <!-- ======================================================= -->
+    <!-- this is the visual one through five condition gauge -->
+    <!-- ======================================================= -->
+    <div class="condition-gauge">
+
+      <!-- this is the colorful gauge background that represents the rating scale -->
+      <div class="gauge-bar">
+
+        <!-- this is the indicator that positions itself based on the rating -->
+        <div
+          class="gauge-indicator"
+          style="left: calc(({{ overall_rating or 5 }} - 1) / 4 * 100%);"
+        ></div>
+
+      </div>
+
+      <!-- this is the label row showing numbers one to five below the gauge -->
+      <div class="gauge-labels">
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span>5</span>
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================= -->
+    <!-- this is the model output section -->
+    <!-- ======================================================= -->
+    <div style="margin-top: 1rem;">
+
+      <h2 style="margin-bottom: 0.5rem;">Model outputs</h2>
+      {# this is a section header that introduces the model predictions #}
+
+      <!-- this is an unordered list showing the RF and XGB predictions -->
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><strong>Random forest</strong> {{ random_rating or 5 }}</li>
+        <li><strong>XGBoost</strong> {{ xgb_rating or 5 }}</li>
+      </ul>
+
+      <p class="muted" style="margin-top: 0.5rem; font-size: 0.9rem;">
+        this is a quick reminder that all model ratings go from one to five
+      </p>
+
+    </div>
+  </section>
+
+
+
+  <!-- ================================================================= -->
+  <!-- this is the big input table that shows the original user entries -->
+  <!-- ================================================================= -->
+  {% if input_rows %}
+  <section class="card export-card">
+
+    <h2>Input data</h2>
+    {# this is the title of the input section #}
+
+    <!-- this is the table that displays each input the user entered -->
+    <table class="export-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+      <tbody>
+
+        {% for label, value in input_rows %}
+        <tr>
+          <!-- this is the left column containing the input label -->
+          <th scope="row"
+              style="text-align: left; padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ label }}
+          </th>
+
+          <!-- this is the right column containing whatever the user entered -->
+          <td style="padding: 0.4rem 0.6rem;
+                     border-bottom: 1px solid rgba(148, 163, 184, 0.4);">
+            {{ value }}
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+
+  </section>
+  {% endif %}
+
+</main>
+
+
+
+<!-- ======================================================================= -->
+<!-- this is the button area that stays on screen and does not print to PDF -->
+<!-- ======================================================================= -->
+<section class="content-narrow">
+  <div class="card export-card">
+
+    <div class="actions" style="margin-top: 0.5rem;">
+
+      <!-- this is the export button that triggers the browser print dialog -->
+      <button
+        class="btn btn-primary"
+        type="button"
+        onclick="window.print()"
+        title="Export this summary to PDF"
+      >
+        Export to PDF
+      </button>
+
+      <!-- this is a super simple navigation link back to the form -->
+      <a href="{{ url_for('rate.index') }}" class="btn">
+        Rate another culvert
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+
+{% endblock %}
+{# this is the end of the content block #}
