@@ -1,4 +1,6 @@
-{% extends "base.html" %} 
+<!-- This is the rate page complete -->
+
+{% extends "base.html" %}
 {# this is extending our shared base layout so all global UI stays consistent #}
 
 {% block title %}Export Rate Data — DMS Inc.{% endblock %}
@@ -117,14 +119,14 @@
           font-size:1.2rem;
           font-weight:600;
         ">
-        {{ overall_rating or 5 }}
+        {{ overall_rating }}
         {# this is showing the overall rating with a fallback of five just in case #}
       </span>
     </p>
 
     <!-- this is the natural language explanation for the rating -->
     <p class="lead">
-      {{ condition_label or "S minus is in very good condition." }}
+      {{ condition_label }}
     </p>
 
 
@@ -141,7 +143,6 @@
           class="gauge-indicator"
           style="left: calc(({{ overall_rating or 5 }} - 1) / 4 * 100%);"
         ></div>
-
       </div>
 
       <!-- this is the label row showing numbers one to five below the gauge -->
@@ -166,8 +167,9 @@
 
       <!-- this is an unordered list showing the RF and XGB predictions -->
       <ul style="list-style: none; padding: 0; margin: 0;">
-        <li><strong>Random forest</strong> {{ random_rating or 5 }}</li>
-        <li><strong>XGBoost</strong> {{ xgb_rating or 5 }}</li>
+          {% for model in ml_list %}
+            <li><strong>{{ model[0] }}</strong> {{ model[1] }}</li>
+          {% endfor %}
       </ul>
 
       <p class="muted" style="margin-top: 0.5rem; font-size: 0.9rem;">
