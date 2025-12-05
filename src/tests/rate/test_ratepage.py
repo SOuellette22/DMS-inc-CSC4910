@@ -15,11 +15,11 @@ def test_post_ratepage(client):
         "/rate/",
         data={
             "soil_ph": "6.5",
-            "soil_drainage": "Well Drained",
-            "soil_moisture": "Moderate",
+            "soil_drainage": "Well drained",
+            "soil_moisture": "10.5",
             "soil_ec": "1.2",
-            "flood_frequency": "Rarely",
-            "culvert_material": "Concrete",
+            "flood_frequency": "rare",
+            "culvert_material": "Reinforced Concrete",
             "culvert_shape": "Round",
             "culvert_length": "10",
             "culvert_age": "5",
@@ -28,11 +28,11 @@ def test_post_ratepage(client):
     )
     assert response.status_code == 200
 
+    # Checks that we are redirected to the home page
+    assert b"<!-- This is the rate page complete -->" in response.data
+
     # Checks that the submission was successful
     assert b"Rating Submitted Properly" in response.data
-
-    # Checks that we are redirected to the home page
-    assert b"This is the home page" in response.data
 
 def test_post_missing_fields_is_not_success(client):
     """Omit required fields and assert submission is not considered successful."""
@@ -49,7 +49,7 @@ def test_post_non_numeric_numeric_field_is_handled(client):
     data = {
         "soil_ph": "6.5",
         "soil_drainage": "Well Drained",
-        "soil_moisture": "Moderate",
+        "soil_moisture": "12.1",
         "soil_ec": "not-a-number",
         "flood_frequency": "Rarely",
         "culvert_material": "Concrete",
@@ -66,7 +66,7 @@ def test_post_negative_and_zero_numbers(client):
     base = {
         "soil_ph": "6.5",
         "soil_drainage": "Well Drained",
-        "soil_moisture": "Moderate",
+        "soil_moisture": "10.2",
         "soil_ec": "1.2",
         "flood_frequency": "Rarely",
         "culvert_material": "Concrete",
