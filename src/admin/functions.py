@@ -52,16 +52,6 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     new_df = new_df[new_df.Cul_rating != "Unknown"]
     new_df["Cul_rating"] = new_df["Cul_rating"].astype(int)
 
-    # This removes outliers from the Age column based on the Cul_rating`
-    rates = new_df['Cul_rating'].unique()
-    rates.sort()
-    for rate in rates:
-        df = new_df['Age'][new_df.Cul_rating == rate]
-        q1 = df.quantile(q=0.25, interpolation='linear')
-        q3 = df.quantile(q=0.75, interpolation='linear')
-        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] < q1)].index)
-        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] > q3)].index)
-
     # This converts the cul_type column into one hot encoded columns
     new_df = new_df[new_df.cul_type != "UNKNOWN"]
     new_df_temp = pd.get_dummies(new_df["cul_type"], prefix='type')
@@ -102,6 +92,23 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
          'Occasional': 3,
          'Frequent': 4, })
     new_df.dropna(subset=['Flooding_Frequency'], axis=0, inplace=True)
+
+    # This removes outliers from the Age column based on the Cul_rating`
+    rates = new_df['Cul_rating'].unique()
+    rates.sort()
+    for rate in rates:
+        df = new_df['Age'][new_df.Cul_rating == rate]
+        q1 = df.quantile(q=0.25, interpolation='linear')
+        q3 = df.quantile(q=0.75, interpolation='linear')
+        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] < q1)].index)
+        new_df = new_df.drop(new_df[(new_df['Cul_rating'] == rate) & (new_df['Age'] > q3)].index)
+
+    # Order the columns in alphabetical order except for the target column which should be first
+    target_col = 'Cul_rating'
+    cols = [col for col in new_df.columns if col != target_col]
+    cols.sort()
+    cols = [target_col] + cols
+    new_df = new_df[cols]
 
     return new_df
 

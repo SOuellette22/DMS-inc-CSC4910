@@ -59,6 +59,24 @@ def index():
 @admin_bp.route("/", methods=['POST'])
 def admin_post():
 
+    if not "username" in session:
+
+        # If not an admin, log out and redirect to home
+        flash("Access denied: You are not an admin.", "danger")
+
+        return redirect(url_for("core.home"))
+
+    username = session["username"]
+
+    if not Admin.query.filter_by(email=username).first():
+        # If not an admin, log out and redirect to home
+        flash("Access denied: You are not an admin.", "danger")
+        session.pop("username", None)
+
+        current_app.logger.error("Non-admin user had session active, logging out. Email: %s", username)
+
+        return redirect(url_for("core.home"))
+
     # Handles the preview of the dataset
     if "dataset-preview" in request.form:
         file = request.files.get('file') # saves the file uploaded
@@ -142,6 +160,25 @@ def admin_post():
 
 @admin_bp.route("/test_training", methods=['POST'])
 def test_training():
+
+    if not "username" in session:
+
+        # If not an admin, log out and redirect to home
+        flash("Access denied: You are not an admin.", "danger")
+
+        return redirect(url_for("core.home"))
+
+    username = session["username"]
+
+    if not Admin.query.filter_by(email=username).first():
+        # If not an admin, log out and redirect to home
+        flash("Access denied: You are not an admin.", "danger")
+        session.pop("username", None)
+
+        current_app.logger.error("Non-admin user had session active, logging out. Email: %s", username)
+
+        return redirect(url_for("core.home"))
+
     # This route is for testing purposes to evaluate model accuracy
     file = request.files.get('file')
 
