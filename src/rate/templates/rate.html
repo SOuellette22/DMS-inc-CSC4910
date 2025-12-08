@@ -8,8 +8,34 @@
 <style>
   /* tiny details */
   .more {
-    margin: -4px 0 8px;
+    margin: 4px 0 8px;
   }
+
+  /* make "See more" look like a button */
+  .more summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--outline);
+    background: #151826;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .more[open] summary {
+    background: #1b2132;
+    border-color: #2b3245;
+  }
+
+  .more summary::-webkit-details-marker {
+    display: none;
+  }
+
   .actions .btn-primary {
     cursor: pointer;
   }
@@ -45,6 +71,21 @@
     font-size: 1.15rem;
     font-weight: 700;
     color: #dce1ea;
+  }
+
+  /* Box around each individual input section */
+  .field-box label {
+    display: grid;
+    gap: 6px;
+    padding: 12px 14px 14px;
+    border-radius: 12px;
+    background: #0f1018;
+    border: 1px solid #232838;
+  }
+
+  .field-box label:hover {
+    border-color: #2b3245;
+    background: #11131c;
   }
 
   .field-box label span {
@@ -89,6 +130,12 @@
 
           <label>
             <span>Soil pH (0–14)</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Enter a numeric pH between 0 and 14. Typical soils are ~4.5–8.5.
+              </div>
+            </details>
             <input
               type="number"
               name="soil_ph"
@@ -98,16 +145,17 @@
               placeholder="e.g., 6.8"
               required
             />
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Enter a numeric pH between 0 and 14. Typical soils are ~4.5–8.5.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Soil Drainage Class</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Use standard USDA/NRCS classes. These are internally mapped for
+                modeling.
+              </div>
+            </details>
             <select name="soil_drainage" required>
               <option value="" disabled selected>Select one…</option>
               <option>Very Poorly Drained</option>
@@ -119,17 +167,16 @@
               <option>Somewhat Excessively Drained</option>
               <option>Excessively Drained</option>
             </select>
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Use standard USDA/NRCS classes. These are internally mapped for
-                modeling.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Soil Moisture (%)</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Percentage based on wet vs. dry soil mass; enter 0–100.
+              </div>
+            </details>
             <input
               type="number"
               name="soil_moisture"
@@ -139,16 +186,17 @@
               placeholder="0–100"
               required
             />
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Percentage based on wet vs. dry soil mass; enter 0–100.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Soil Electrical Conductivity (&gt; 0)</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Provide a positive numeric value; site surveys or lab tests can
+                report EC.
+              </div>
+            </details>
             <input
               type="number"
               name="soil_ec"
@@ -157,17 +205,16 @@
               placeholder="e.g., 1.25"
               required
             />
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Provide a positive numeric value; site surveys or lab tests can
-                report EC.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Flood Frequency</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Choose the closest category from local hydrologic records/studies.
+              </div>
+            </details>
             <select name="flood_frequency" required>
               <option value="" disabled selected>Select one…</option>
               <option>None</option>
@@ -176,12 +223,6 @@
               <option>Occasional</option>
               <option>Frequent</option>
             </select>
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Choose the closest category from local hydrologic records/studies.
-              </div>
-            </details>
           </label>
         </div>
 
@@ -191,6 +232,13 @@
 
           <label>
             <span>Culvert Material</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Pick the installed material. Inputs are encoded for modeling
+                consistency.
+              </div>
+            </details>
             <select name="culvert_material" required>
               <option value="" disabled selected>Select one…</option>
               <option>Aluminum</option>
@@ -201,17 +249,16 @@
               <option>Reinforced Concrete</option>
               <option>Unreinforced Concrete</option>
             </select>
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Pick the installed material. Inputs are encoded for modeling
-                consistency.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Culvert Shape</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Select the cross-section shape. Model encodes shapes into features.
+              </div>
+            </details>
             <select name="culvert_shape" required>
               <option value="" disabled selected>Select one…</option>
               <option>Box</option>
@@ -220,16 +267,17 @@
               <option>Drop Inlet</option>
               <option>Ellipse</option>
             </select>
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Select the cross-section shape. Model encodes shapes into features.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Culvert Length (ft)</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Enter the linear distance from inlet to outlet along the culvert’s
+                axis (feet), not circumference.
+              </div>
+            </details>
             <input
               type="number"
               name="culvert_length"
@@ -238,17 +286,17 @@
               placeholder="&gt; 0"
               required
             />
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Enter the linear distance from inlet to outlet along the culvert’s
-                axis (feet), not circumference.
-              </div>
-            </details>
           </label>
 
           <label>
             <span>Culvert Age (years)</span>
+            <details class="more" data-more>
+              <summary data-text="See more">See more</summary>
+              <div class="muted">
+                Years since installation (or best estimate from records).
+                Non-negative integer.
+              </div>
+            </details>
             <input
               type="number"
               name="culvert_age"
@@ -257,13 +305,6 @@
               placeholder="≥ 0"
               required
             />
-            <details class="more" data-more>
-              <summary data-text="See more">See more</summary>
-              <div class="muted">
-                Years since installation (or best estimate from records).
-                Non-negative integer.
-              </div>
-            </details>
           </label>
         </div>
 
@@ -296,4 +337,4 @@
       summary.textContent = d.open ? closeText : openText;
     });
   });
-</script> 
+</script>
