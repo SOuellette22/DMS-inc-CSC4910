@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" data-theme="light">
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Title{% endblock %}</title>
@@ -8,42 +8,43 @@
 
     <!--    Flash Messaging Styles    -->
     <style>
-        .flash-container {
-            position: fixed;
-            z-index: 1000;
-            top: 75px;
-            width: 800px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .flash-message {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .flash-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .flash-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .flash-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
+      .flash-container {
+        position: fixed;
+        z-index: 1000;
+        top: 75px;
+        width: 800px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .flash-message {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .flash-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .flash-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .flash-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header class="site-header">
       <a class="brand" href="{{ url_for('core.home') }}">
         <img
-          src="/img/DMSCIRCLELOGO(DARK).PNG"
+          id="brand-logo"
+          src="/img/DMSLOGO.PNG"
           alt="DMS Inc. Logo"
           class="brand-logo"
         />
@@ -56,17 +57,28 @@
         <a href="{{ url_for('rate.index') }}" {% block rateActive %}{% endblock %}>Rate a Culvert</a>
         <a href="{{ url_for('admin.index') }}" {% block adminActive %}{% endblock %}>Admin</a>
       </nav>
+
+      <!-- theme toggle -->
+      <button
+        id="theme-toggle"
+        class="theme-switch"
+        aria-pressed="false"
+        title="Toggle theme"
+      >
+        <span class="vh">Toggle theme</span>
+        <span class="theme-switch__sun" aria-hidden="true">☀️</span>
+        <span class="theme-switch__moon" aria-hidden="true">🌙</span>
+        <span class="theme-switch__knob" aria-hidden="true"></span>
+      </button>
     </header>
 
-    <!--  This is the way that we display flash messages  -->
+    <!--  Flash messages  -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-container">
-                {% for category, message in messages %}
-                    <div class="flash-message flash-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
             </div>
         {% endif%}
     {% endwith %}
@@ -74,19 +86,58 @@
     {% block content %}{% endblock %}
 
     <footer class="site-footer">
-      <small>© 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari</small>
+      <small
+        >© 2025 DMS Inc. · Capstone CSC4910 · Client: Dr. Sadegh Asgari</small
+      >
     </footer>
 
-    <!--  This is the script to remove the flash messages after 3 seconds  -->
+    <!--  Auto hide flashes  -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const flashMessages = document.querySelectorAll('.flash-message');
-            flashMessages.forEach(function(message) {
-                setTimeout(function() {
-                    message.style.display = 'none';
-                }, 3000); // Hide after 3 seconds (3000 milliseconds)
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashMessages = document.querySelectorAll(".flash-message");
+        flashMessages.forEach(function (message) {
+          setTimeout(function () {
+            message.style.display = "none";
+          }, 3000);
         });
+      });
     </script>
-</body>
+
+    <!-- theme script -->
+    <script>
+      (function () {
+        const STORAGE_KEY = "theme-preference";
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        const logo = document.getElementById("brand-logo");
+
+        const LIGHT_LOGO = "/img/DMSLOGO.PNG";
+        const DARK_LOGO = "/img/DMSCIRCLELOGO(DARK).PNG";
+
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+        const initial = stored ?? (prefersDark ? "dark" : "light");
+        setTheme(initial);
+
+        toggle.addEventListener("click", () => {
+          const next =
+            root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next, true);
+        });
+
+        const mq = matchMedia("(prefers-color-scheme: dark)");
+        mq.addEventListener?.("change", (e) => {
+          if (!localStorage.getItem(STORAGE_KEY))
+            setTheme(e.matches ? "dark" : "light");
+        });
+
+        function setTheme(mode, persist = false) {
+          root.setAttribute("data-theme", mode);
+          if (persist) localStorage.setItem(STORAGE_KEY, mode);
+          toggle.setAttribute("aria-pressed", String(mode === "dark"));
+          logo.src = mode === "dark" ? DARK_LOGO : LIGHT_LOGO;
+        }
+      })();
+    </script>
+  </body>
 </html>
