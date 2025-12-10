@@ -1,6 +1,6 @@
-/* theme tokens */
+/* This is theme tokens for light and dark mode */
 :root {
-  /* light */
+  /* This is light mode base colors */
   color-scheme: light;
   --bg: #ffffff;
   --panel: #f9fafb;
@@ -14,7 +14,9 @@
   --radius: 18px;
 }
 
+/* This is dark mode overrides */
 :root[data-theme="dark"] {
+  /* This is dark mode base colors */
   color-scheme: dark;
   --bg: #0b0b0f;
   --panel: #101218;
@@ -28,38 +30,52 @@
   --radius: 18px;
 }
 
-/* base */
+/* This is base reset and typography */
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
+  /* This is remove default browser spacing */
   margin: 0;
   padding: 0;
+  /* This is connect background to theme */
   background: var(--bg);
+  /* This is base text color */
   color: var(--text);
+  /* This is global font and line height */
   font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
     "Helvetica Neue", Arial;
 }
+
 img {
+  /* This is responsive image scaling */
   max-width: 100%;
   display: block;
 }
+
 a {
+  /* This is inherit color for links */
   color: inherit;
   text-decoration: none;
 }
+
 h1,
 h2,
 h3 {
+  /* This is heading spacing */
   margin: 0 0 0.6rem;
 }
+
 p {
+  /* This is paragraph spacing */
   margin: 0.4rem 0 1rem;
 }
 
-/* header */
+/* This is site header layout */
 .site-header {
+  /* This is align header items */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -71,22 +87,27 @@ p {
   border-bottom: 1px solid var(--outline);
 }
 
+/* This is brand logo and text alignment */
 .brand {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   font-weight: 700;
 }
+
 .brand-text {
   letter-spacing: 0.3px;
 }
 
+/* This is nav link styles */
 .nav a {
   padding: 8px 12px;
   border-radius: 10px;
   color: var(--muted);
   border: 1px solid transparent;
 }
+
+/* This is nav hover and active state */
 .nav a:hover,
 .nav a.active {
   background: var(--card-hover);
@@ -94,18 +115,20 @@ p {
   border-color: var(--outline);
 }
 
-/* layout */
+/* This is main layout padding */
 main {
   padding: 22px;
 }
 
-/* hero */
+/* This is hero section wrapper */
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 auto 20px auto;
 }
+
+/* This is hero image styling */
 .hero-img {
   width: 800px;
   height: 475px;
@@ -113,27 +136,33 @@ main {
   box-shadow: var(--shadow);
   object-fit: cover;
 }
+
+/* This is hero text container */
 .hero-overlay {
   max-width: 800px;
   text-align: center;
   margin-top: 14px;
 }
+
 .hero-overlay h1 {
   font-size: clamp(22px, 3vw, 32px);
   margin-bottom: 0.35rem;
 }
+
 .hero-overlay p {
   color: var(--muted);
   font-size: 1rem;
 }
 
-/* cards */
+/* This is cards grid layout */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin: 18px 0;
 }
+
+/* This is single card styling */
 .card {
   background: var(--card);
   border: 1px solid var(--outline);
@@ -141,45 +170,55 @@ main {
   padding: 18px;
   box-shadow: var(--shadow);
 }
+
+/* This is card hover transition */
 .card-link {
   display: block;
   transition: transform 0.18s ease, background 0.18s ease;
 }
+
 .card-link:hover {
   transform: translateY(-3px);
   background: var(--card-hover);
 }
 
-/* text helpers */
+/* This is text block with limited width */
 .blurb {
   max-width: 1000px;
   margin: 18px auto;
 }
+
 .lead {
   color: var(--muted);
 }
+
 .muted {
   color: var(--muted);
 }
+
+/* This is list spacing */
 .simple-list {
   margin: 0.3rem 0 0.6rem;
   padding-left: 1.1rem;
 }
+
 .simple-list li {
   margin: 0.25rem 0;
 }
 
-/* content widths */
+/* This is medium width content constraint */
 .content-narrow {
   max-width: 900px;
   margin: 0 auto;
 }
+
+/* This is wide layout */
 .content-wide {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* ---- Rate Page ---- */
+/* This is grid for rate page top section */
 .rate-grid-top {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -187,15 +226,19 @@ main {
   margin-top: 10px;
 }
 
+/* This is rate page bottom grid */
 .rate-grid-bottom {
-    display: grid;
-    gap: 18px;
-    margin-top: 10px;
+  display: grid;
+  gap: 18px;
+  margin-top: 10px;
 }
 
+/* This is form card padding */
 .form-card {
   padding: 20px;
 }
+
+/* This is fieldset style */
 .field-grid {
   display: grid;
   gap: 14px;
@@ -203,17 +246,20 @@ main {
   margin: 0;
   padding: 0;
 }
+
 .field-grid legend {
   font-weight: 700;
   margin: 10px 0 4px;
   color: var(--text);
 }
 
+/* This is label layout */
 label {
   display: grid;
   gap: 6px;
 }
 
+/* This is input styles */
 input,
 select,
 textarea {
@@ -227,19 +273,26 @@ textarea {
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     background 0.15s ease;
 }
+
 input:focus,
 select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
+
+/* This is helper text */
 .helper {
   font-size: 0.92rem;
   color: var(--muted);
   margin-top: 4px;
 }
+
+/* This is actions spacing */
 .actions {
   margin-top: 4px;
 }
+
+/* This is disabled button */
 .btn {
   display: inline-block;
   background: var(--panel);
@@ -250,13 +303,15 @@ select:focus {
   color: var(--text);
 }
 
-/* media card */
+/* This is media card container */
 .media-card {
   padding: 0;
   overflow: hidden;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+
+/* This is media image sizing */
 .media-img {
   width: 1920px;
   height: 1080px;
@@ -266,7 +321,7 @@ select:focus {
   border-radius: var(--radius);
 }
 
-/* footer */
+/* This is footer layout */
 .site-footer {
   padding: 24px;
   color: var(--muted);
@@ -275,14 +330,14 @@ select:focus {
   margin-top: 22px;
 }
 
-/* logo size */
+/* This is logo size */
 .brand-logo {
   height: 40px;
   width: auto;
   display: block;
 }
 
-/* theme toggle styles */
+/* This is visually hidden for screen readers */
 .vh {
   position: absolute;
   width: 1px;
@@ -294,6 +349,8 @@ select:focus {
   white-space: nowrap;
   border: 0;
 }
+
+/* This is theme toggle container */
 .theme-switch {
   appearance: none;
   position: relative;
@@ -312,22 +369,36 @@ select:focus {
   transition: background 0.16s, border-color 0.16s, box-shadow 0.16s,
     color 0.16s;
 }
+
+/* This is sun placement */
 .theme-switch__sun {
   justify-self: start;
   margin-left: 14px;
 }
+
+/* This is moon placement */
 .theme-switch__moon {
   justify-self: end;
   margin-right: 14px;
 }
+
+/* This is center the emoji so it looks visually centered */
 .theme-switch__sun,
 .theme-switch__moon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
   font-size: 18px;
+  line-height: 1;
   opacity: 0.9;
   pointer-events: none;
   z-index: 1;
   user-select: none;
 }
+
+/* This is knob styling */
 .theme-switch__knob {
   position: absolute;
   top: 4px;
@@ -342,6 +413,8 @@ select:focus {
     border-color 0.16s;
   pointer-events: none;
 }
+
+/* This is knob position in dark mode */
 :root[data-theme="dark"] .theme-switch__knob {
   left: calc(100% - 4px - 36px);
 }
