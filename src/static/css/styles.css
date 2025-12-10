@@ -396,14 +396,16 @@ select:focus {
   line-height: 0;
   opacity: 0.9;
   pointer-events: none;
-  z-index: 1;
   user-select: none;
+  z-index: 1;
 }
 
 /* This is knob styling */
 .theme-switch__knob {
   position: absolute;
-  top: 4px;
+  /* This is perfect vertical centering */
+  top: 50%;
+  transform: translateY(-50%);
   left: 4px;
   width: 36px;
   height: 36px;
