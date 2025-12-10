@@ -374,12 +374,14 @@ select:focus {
 .theme-switch__sun {
   justify-self: start;
   margin-left: 14px;
+  transform: translateY(-1px);
 }
 
 /* This is moon placement */
 .theme-switch__moon {
   justify-self: end;
   margin-right: 14px;
+  transform: translateY(-1px);
 }
 
 /* This is center the emoji so it looks visually centered */
@@ -391,7 +393,7 @@ select:focus {
   width: 20px;
   height: 20px;
   font-size: 18px;
-  line-height: 1;
+  line-height: 0;
   opacity: 0.9;
   pointer-events: none;
   z-index: 1;
