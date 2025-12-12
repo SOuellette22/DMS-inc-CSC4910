@@ -9,6 +9,22 @@ This project develops a public, user-friendly website that predicts culvert cond
 
 ### Installation
 
+- To setup the project run the following:
+```bash
+ant dist
+```
+
+- Run the server first is as follows:
+```bash
+java -jar dist/server.jar
+```
+
+- Run the client next as follows:
+```bash
+java -jar dist/client.jar
+```
+
+
 Here are the steps to get the website up and running on your own device so that all the features work the way that they are supposed to:
 
 1. Getting the repo on your machine:
