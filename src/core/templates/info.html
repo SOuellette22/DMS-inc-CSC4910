@@ -148,13 +148,11 @@ main.content-narrow .card {
         indicate better condition.
       </li>
       <li>
-        Full probability distribution — the likelihood of each rating (1, 2, 3, 4, 5) is
-        displayed numerically and with a simple chart, so users can see whether the result is clear-cut or
-        uncertain.
+        Full probability distribution — the output from each model is provided so the user can see if there was any uncertainty.
       </li>
       <li>
         Downloadable report (PDF) — a printable summary that captures the inputs, predicted
-        rating, probability distribution, and factor explanations for recordkeeping and communication with
+        rating, and probability distribution for recordkeeping and communication with
         colleagues or stakeholders.
       </li>
     </ul>
@@ -186,96 +184,49 @@ main.content-narrow .card {
       See all state conversions
     </button>
 
-    <div id="state-conversion-list" class="state-conversion-list hidden">
-      <ul class="simple-list">
-        <p>
-          Most states use the standard 0–9 National Bridge Inventory (NBI) rating system
-          or do not assign a separate culvert-specific condition score. Only states that
-          apply alternative classification methods, adapt the 0–9 scale for culverts, or
-          use nonstandard condition definitions are listed below. These cases require
-          translation to the unified 1–5 rating used in this tool.
-        </p>
+<div id="state-conversion-list" class="state-conversion-list hidden">
+  <div class="simple-list">
+    <p>
+      The model dataset combines culvert inventories from four states: Utah, Colorado, Ohio, and Vermont.
+      Because each DOT uses a different rating scale, all ratings are converted into Utah’s 1–5 scale
+      during preprocessing so the model is trained on consistent labels.
+    </p>
 
-        <li>
-          <strong>Utah</strong> —
-          Uses a native 1–5 culvert condition scale. This becomes the baseline; no conversion is required.
-        </li>
-        <li>
-          <strong>Colorado</strong> —
-          Commonly uses a 0–9 bridge-style condition scale. 
-        </li>
-        <li>
-          <strong>Ohio</strong> —
-          Uses numeric condition codes for culverts. These codes are translated into the 1–5 Utah-style
-          rating using a lookup table defined by the research team.
-        </li>
-        <li>
-          <strong>Vermont</strong> —
-          Uses multi-category scores (for structure, material, shape, etc.). Those categories are collapsed
-          into a single 1–5 rating based on official condition thresholds.
-        </li>
-        <li>
-          <strong>New Hampshire</strong> —
-          Often relies on 0–9 bridge-style ratings or stream-crossing scores.
-        </li>
-        <li>
-          <strong>Maryland</strong> —
-          Uses a 0–9 National Bridge Inventory–style condition rating for many culvert-like structures.
-        </li>
-        <li>
-          <strong>Pennsylvania</strong> —
-          Uses 0–9 condition codes in their bridge/culvert inspection manuals. 
-        </li>
-        <li>
-          <strong>New York</strong> —
-          Uses a 1–7 style condition scale for some assets. Those seven levels are compressed into the 1–5
-          rating while preserving the meaning of “poor”, “fair”, and “good” ranges.
-        </li>
-        <li>
-          <strong>Massachusetts</strong> —
-          Bridge-size culverts are typically rated on a 0–9 scale, while smaller culverts may be classified
-          as Good/Fair/Poor. Both systems are converted to the 1–5 scale for use in this tool.
-        </li>
-        <li>
-          <strong>Maine</strong> —
-          Uses categories like Good / Fair / Poor / Severe. These four levels are mapped into the 1–5
-          scale, with “Severe” aligning to the lowest rating.
-        </li>
-        <li>
-          <strong>Washington</strong> —
-          Frequently classifies culverts as Functional / Partially Functional / Failed in fish passage
-          programs. These non-numeric labels are converted into the 1–5 scale.
-        </li>
-        <li>
-          <strong>California</strong> —
-          Some culvert datasets use maintenance priority codes (Priority 1, 2, 3) instead of a direct condition
-          score.
-        </li>
-        <li>
-          <strong>Oregon</strong> —
-          Uses a three-level system for many small culverts (Acceptable / Monitor / Needs Repair), and 0–9
-          for bridge-size structures. Both are translated to the unified 1–5 scale.
-        </li>
-        <li>
-          <strong>Texas</strong> —
-          Commonly uses a 0–9 NBI-style rating for culverts.
-        </li>
-        <li>
-          <strong>Florida</strong> —
-          Uses 0–9 bridge-style condition ratings for culvert-like structures. 
-        </li>
-        <li>
-          <strong>North Carolina</strong> —
-          Often classifies culverts as Good / Fair / Poor. These categories are mapped to the 1–5 scale
-          while preserving their relative severity.
-        </li>
-      </ul>
+    <ul class="simple-list">
+      <li>
+        <strong>Utah (UDOT)</strong> —
+        Uses the native 5-point culvert condition scale (1–5). This is the baseline; no conversion is required.
+      </li>
 
-      <p class="muted" style="margin-top: 12px;">
-        As additional states or rating systems are added to the dataset, they will be translated into this
-        same 1–5 scale so that model outputs remain consistent and comparable.
-      </p>
-    </div>
+      <li>
+        <strong>Colorado (CDOT)</strong> —
+        Uses a 9-point condition scale. These 9-point ratings are converted into the Utah 5-point scale
+        based on matching the inspection criteria.
+      </li>
+
+      <li>
+        <strong>Ohio (ODOT)</strong> —
+        Uses a 9-point condition scale. These 9-point ratings are converted into the Utah 5-point scale
+        based on matching the inspection criteria.
+      </li>
+
+      <li>
+        <strong>Vermont (VTrans)</strong> —
+        Uses a 7-point condition scale. These 7-point ratings are converted into the Utah 5-point scale
+        based on matching the inspection criteria.
+      </li>
+    </ul>
+
+    <figure style="margin: 14px 0 0;">
+      <img
+        src="/img/State_conversions.png"
+        alt="State rating conversion diagram mapping Vermont and Colorado/Ohio scales into Utah’s 1–5 scale"
+        style="width:100%; max-width:700px; margin: 0 auto; border-radius: 14px; border: 1px solid var(--outline);"
+      />
+    </figure>
+  </div>
+</div>
+
   </section>
 </main>
 
