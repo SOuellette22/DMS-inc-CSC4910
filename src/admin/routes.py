@@ -143,7 +143,7 @@ def admin_post():
                     
         # Gets the model details from the form
         model_name = request.form.get("model_name")
-        file_path = "/" + model_name.strip() + ".pkl"
+        file_path = path + ".pkl"
         admin_email = session["username"]
         description = request.form.get("description")
 
