@@ -19,6 +19,21 @@
     color 0.16s;
 }
 
+:root{
+    /* This is light mode base colors */
+    color-scheme: light;
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f0f1f5;
+    --text: #202124;
+    --muted: #5f6368;
+    --accent: #1a73e8;
+    --outline: #dfe1e5;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --radius: 18px;
+}
+
 /* This is dark mode overrides */
 :root[data-theme="dark"] {
   /* This is dark mode base colors */
