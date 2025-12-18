@@ -128,7 +128,7 @@ def train_model(name, path, db_path, X_train, Xtest, y_train, y_test):
     from xgboost import XGBClassifier
     import pickle
 
-    db_dir = db_path + "/tmp/"
+    db_dir = db_path + "/tmp"
 
     # Create the temp directory if it does not exist
     if not os.path.exists(db_dir):
