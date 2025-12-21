@@ -51,7 +51,7 @@ floodFrequencyOptions = [
 # Helper function that converts a numeric rating into a human-readable label
 def describe_condition(score: int) -> str:
     if score >= 5:
-        return "S minus is in very good condition."
+        return "The culvert is in excellent condition."
     elif score == 4:
         return "The culvert is in good condition with minor concerns."
     elif score == 3:
@@ -182,6 +182,8 @@ def index():
                 with open(model_path, "rb") as f:
                     ml_model = pickle.load(f)
                     prediction = ml_model.predict(df)
+                    if prediction[0] < 1:
+                        prediction[0] = 1
                     ml_list.append([model.model_name, prediction[0]])
 
 
