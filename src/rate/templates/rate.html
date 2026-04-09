@@ -21,7 +21,7 @@
     padding: 4px 10px;
     border-radius: 999px;
     border: 1px solid var(--outline);
-    background: #151826;
+    background: var(--card);
     font-size: 0.82rem;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -30,8 +30,8 @@
   }
 
   .more[open] summary {
-    background: #1b2132;
-    border-color: #2b3245;
+    background: var(--card-hover);
+    border-color: var(--outline);
   }
 
   .more summary::-webkit-details-marker {
@@ -72,7 +72,7 @@
     margin-bottom: 6px;
     font-size: 1.15rem;
     font-weight: 700;
-    color: #dce1ea;
+    color: var(--text);
   }
 
   /* Box around each individual input section */
@@ -81,13 +81,13 @@
     gap: 6px;
     padding: 12px 14px 14px;
     border-radius: 12px;
-    background: #0f1018;
-    border: 1px solid #232838;
+    background: var(--bg);
+    border: 1px solid var(--outline);
   }
 
   .field-box label:hover {
-    border-color: #2b3245;
-    background: #11131c;
+    border-color: var(--accent);
+    background: var(--card-hover);
   }
 
   .field-box label span {

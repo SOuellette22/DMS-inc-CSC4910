@@ -56,7 +56,7 @@ flask db upgrade
 
 Now all you need to do to run the website is run this while your venv is activated;
 ```bash
-python src/run.py
+python run.py
 ```
 Then click the link that you are given in the terminal.
 
