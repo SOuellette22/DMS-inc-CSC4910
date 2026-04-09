@@ -1,0 +1,12 @@
+[Unit]
+Description=DMS Inc Flask Application
+After=network.target
+
+[Service]
+Type=simple
+User=ouellttese
+WorkingDirectory=/projects/dms_culvert_rating_predictor/DMS-inc-CSC4910
+ExecStart=/projects/dms_culvert_rating_predictor/DMS-inc-CSC4910/.venv/bin/python run.py
+
+[Install]
+WantedBy=multi-user.target
